@@ -13,14 +13,14 @@
 このリポジトリでは、大学院での研究・プログラミングでの成果物・データの分析結果等をまとめています。
 
 ## フォルダ構成
--`01_seminar` 
+-[01_seminar](01_seminar/) 
 →大学院のゼミで行ったテキスト輪読について、私が担当した箇所のpdf資料を掲載しています。<br>
 ゼミで使用しているテキストはこちら：https://www.gakujutsu.co.jp/product/978-4-7806-0860-1/
 
--`02_data_analysis` 
+-[02_data_analysis](02_data_analysis/)
 →RやPythonを使ったデータ分析結果・コード・グラフ等を掲載しています。
 
--`03_programming` 
+-[03_programming](03_programming/) 
 →自作したプログラムのコードを掲載しています。
 
 ---
