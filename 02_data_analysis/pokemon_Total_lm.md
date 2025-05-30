@@ -2,7 +2,9 @@
 Rコンソールで記述したコードはこちら：
 
 # 回帰分析結果
-データの散布図と得られた直線の図はこちら：
+データセットの値(measure)と予測モデルの値(predict)の散布図：[pokemon_Total_predict&measure.png](pokemon_Total_predict&measure.png/) <br>
+
+QQプロット（残差と正規分布の比較）の散布図：[pokemon_Total_QQplot.png](pokemon_Total_QQplot.png)
 
 # 結果と考察
 Pokemon with statsでは初代から第6世代までのポケモン721匹を対象としたデータですが、データの個数は800個ありました。
