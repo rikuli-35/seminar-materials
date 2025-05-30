@@ -1,5 +1,5 @@
 # コード
-Rコンソールで記述したコードはこちら：
+Rコンソールで記述したコードはこちら：[pokemon_Total.R](pokemon_Total.R/) 
 
 # 回帰分析結果
 データセットの値(measure)と予測モデルの値(predict)の散布図：[pokemon_Total_predict&measure.png](pokemon_Total_predict&measure.png/) <br>
