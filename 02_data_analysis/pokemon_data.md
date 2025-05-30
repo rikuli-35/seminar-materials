@@ -47,7 +47,7 @@ Type 1、Type 2、Legendary、（Generation）
 "Dark"（あくタイプ）→16 <br>
 "Steel"（はがねタイプ）→17 <br>
 "Fairy"（フェアリータイプ）→18 <br>
-""(２つ目のタイプがない場合) →0 <br>
+""(２つ目のタイプがない場合) →19 (コード内では、変数を書き換えて"None"表記にしています) <br>
 
 -Legendary
 True・Falseはas.factorで２値変数に変換していますが、表記はTrue・Falseです。
