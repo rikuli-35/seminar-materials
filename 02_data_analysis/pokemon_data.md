@@ -49,8 +49,8 @@ Type 1、Type 2、Legendary、（Generation）
 "Fairy"（フェアリータイプ）→18 <br>
 ""(２つ目のタイプがない場合) →19 (コード内では、変数を書き換えて"None"表記にしています) <br>
 
--Legendary
+-Legendary <br>
 True・Falseはas.factorで２値変数に変換していますが、表記はTrue・Falseです。
 
--Generation
+-Generation <br>
 1~6の数値で表現できるため、ダミー化する必要はありませんが、「各世代の平均」などを求める際にはダミー変数にする場合があります。
