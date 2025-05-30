@@ -1,5 +1,5 @@
-# ポケモンの数値予測・判別・特徴抽出
-Kaggleに掲載されている、「Pokemon with stats」のデータセットを使用してデータ分析(回帰分析・判別分析・主成分分析)を行なった結果をまとめています。<br>
+# ポケモンのデータ分析
+Kaggleに掲載されている、「Pokemon with stats」のデータセットを使用してデータ分析(回帰分析・判別分析・主成分分析)を行なっています。<br>
 使用したデータセット：https://www.kaggle.com/datasets/abcsds/pokemon<br>
 
 -データセットについて<br>
