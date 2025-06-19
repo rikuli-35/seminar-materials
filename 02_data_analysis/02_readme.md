@@ -9,10 +9,14 @@ Rは統計解析やデータ分析に特化した無料のソフトウェアで�
 -[pokemon_data.md](pokemon_data.md/) <br>
 ポケモンに関するデータセットの概要を説明しています。
 
--[okemon_data2.md](pokemon_data2/md) <br>
-自作したポケモンのデータセットの概要を説明しています。（現在制作中なので開けません）
+-[pokemon_data2.md](pokemon_data2.md/) <br>
+自作したポケモンのデータセットの概要を説明しています。
+
+-[type_network.md](type_network.md/)<br>
+ポケモンのタイプ相性についてのネットワーク分析の概要を説明しています。
 
 -[pokemon_Total_lm.md](pokemon_Total_lm.md) <br>
 回帰分析から「ポケモンの合計種族値を予測」するモデルを作成するプロジェクトです。
 
-6月中に判別分析結果を掲載する予定です。（最終編集日：2025年6月8日）
+-[pokemon]
+（最終編集日：2025年6月8日）
