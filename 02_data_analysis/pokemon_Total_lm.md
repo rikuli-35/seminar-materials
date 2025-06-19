@@ -1,7 +1,7 @@
 # コード
 Rコンソールで記述したコードはこちら：[pokemon_Total.R](pokemon_Total.R/) 
 
-# 回帰分析結果
+# 回帰分析の結果
 データセットの値(measure)と予測モデルの値(predict)の散布図：[pokemon_Total_predict&measure.png](pokemon_Total_predict&measure.png/) <br>
 
 QQプロット（残差と正規分布の比較）の散布図：[pokemon_Total_QQplot.png](pokemon_Total_QQplot.png)
