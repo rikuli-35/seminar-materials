@@ -5,7 +5,7 @@
 # コード
 Rコンソールで記述したコードはこちら：[pokemon_Total.R](pokemon_Total.R/) 
 
-# 重回帰分析の結果
+# グラフ
 元データの値(measure)と予測モデルの値(predict)の散布図：[pokemon_Total_predict&measure.png](pokemon_Total_predict&measure.png/) <br>
 
 残差プロット（残差と予測値の散布図）：[pokemon_Total_residualsplot.png](pokemon_Total_residualsplot.png/)<br>
