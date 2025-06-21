@@ -12,7 +12,8 @@
 ・タイプ相性の有向グラフ：[type_network1.png](type_network1.png/) <br>
 （赤色の有向辺は効果ばつぐん、青色の有向辺は効果いまひとつ、灰色の有向辺は等倍、黒色の有向辺は効果なし）<br>
 
-・次数中心性の棒グラフ：[]()<br>
+・次数中心性の棒グラフ：[type_degree_graph.png](type_degree_graph.png/)<br>
+（赤色はタイプの攻撃性、青色はタイプの耐性）<br>
 
 ・媒介中心性()・固有ベクトル中心性()のネットワーク図：[type_bet&vec_network.png](type_bet&vec_network.png/) <br>
 
