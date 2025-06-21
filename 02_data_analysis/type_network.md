@@ -2,16 +2,18 @@
 ポケモン対戦では、攻撃技のタイプと攻撃を受けるポケモンのタイプによって、ポケモンが受けるダメージの倍率が決定します。<br>
 ここでは、重要度の高いタイプを発見するために、下記の全18タイプの相性表をもとにデータセットを自作し、ネットワーク分析（次数中心性、媒介中心性、固有ベクトル中心性の分析）を行っています。<br>
 
-ポケットモンスターオフィシャルサイトにて公開されているタイプ相性表：https://www.pokemon.co.jp/ex/sun_moon/fight/161215_01.html <br>
-自作したcsvファイル：[type.csv](type.csv/)
+・ポケットモンスターオフィシャルサイトにて公開されているタイプ相性表：https://www.pokemon.co.jp/ex/sun_moon/fight/161215_01.html <br>
+・自作したcsvファイル：[type.csv](type.csv/)
 
 # コード
 
 # グラフ
-タイプ相性の有向グラフ：[type_network1.png](type_network1.png/) <br>
+・タイプ相性の有向グラフ：[type_network1.png](type_network1.png/) <br>
 （赤色の有向辺は効果ばつぐん、青色の有向辺は効果いまひとつ、灰色の有向辺は等倍、黒色の有向辺は効果なし）<br>
-次数中心性の棒グラフ：[]()<br>
-媒介中心性()・固有ベクトル中心性()のネットワーク図：[type_bet&vec_network.png](type_bet&vec_network.png/) <br>
+
+・次数中心性の棒グラフ：[]()<br>
+
+・媒介中心性()・固有ベクトル中心性()のネットワーク図：[type_bet&vec_network.png](type_bet&vec_network.png/) <br>
 
 # 結果
 
