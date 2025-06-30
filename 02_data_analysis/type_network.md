@@ -1,10 +1,11 @@
 # 新しいポケモンのタイプ提案プロジェクト
-ここでは、ポケモンの新しいタイプを考案するために、ネットワーク分析の観点から、ポケモンの各世代の変化とともに
-それぞれのタイプ相性表をもとにネットワークを構築し、世代の変化とともにタイプの重要性がどのように変化していったのかをネットワーク分析の観点から考察し、新しいタイプの考案を行う
+ここでは、ポケモンの新しいタイプを考案するために、ネットワーク分析の観点から、各タイプの重要性を推測しています。
+
+詳しい説明はこちら：https://trusting-eagle-b15.notion.site/21b2a19a047380f58c16eb764cfff4d5
 
 # 構築したネットワーク
 ポケモンのタイプ相性は「初代」、「第2世代〜第5世代」、「第6世代以降」で変化しています。<br>
-そのため、3種類のネットワークを構築し、それぞれを比較することで、各タイプの重要性を推測しています。<br>
+そのため、3種類のネットワークを構築し、それぞれを比較することで、各タイプの重要性を推測しています。
 
 -初代のタイプ相性表：https://wiki.ポケモン.com/wiki/相性 
 
@@ -28,6 +29,17 @@
 -[type_network.R](type_network.R/)
 
 # グラフ
+-初代の次数中心性：[type_degree_graph_1.png](type_degree_graph_1.png/)
+
+-初代の媒介中心性・固有ベクトル中心性：[type_bet_vec_graph_1.png](type_bet_vec_graph_1.png/)
+
+-第2世代〜第5世代の次数中心性：[type_degree_graph_2_to_5.png](type_degree_graph_2_to_5.png/)
+
+-第2世代〜第5世代の媒介中心性・固有ベクトル中心性：[type_bet_vec_graph_2_to_5.png](type_bet_vec_graph_2_to_5.png/)
+
+-第6世代〜の次数中心性：[type_degree_graph_6_to_9.png](type_degree_graph_6_to_9.png/)
+
+-第6世代〜の媒介中心性・固有ベクトル中心性：[type_bet_vec_graph_6_to_9.png](type_bet_vec_graph_6_to_9.png/)
 
 
 
