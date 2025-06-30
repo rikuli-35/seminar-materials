@@ -25,7 +25,4 @@ notionの個人サイト：https://trusting-eagle-b15.notion.site/21b2a19a047380
 -[03_programming](03_programming/) 
 →自作したプログラムの概要とコードを掲載しています。
 
--[04_others](04_others/)
-→その他
-
 ---
