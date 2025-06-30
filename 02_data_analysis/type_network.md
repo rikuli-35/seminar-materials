@@ -25,6 +25,7 @@
 -第6世代以降のネットワーク：[type_network_6_to_9.png](type_network_6_to_9.png/)
 
 # コード
+-[type_network.R](type_network.R/)
 
 # グラフ
 
