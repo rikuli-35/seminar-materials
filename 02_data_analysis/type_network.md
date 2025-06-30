@@ -6,17 +6,17 @@
 ポケモンのタイプ相性は「初代」、「第2世代〜第5世代」、「第6世代以降」で変化しています。<br>
 そのため、3種類のネットワークを構築し、それぞれを比較することで、各タイプの重要性を推測しています。<br>
 
-初代のタイプ相性表：
-上記の表から自作したcsvファイル：[type_1.csv](type_1.csv/)
-初代のネットワーク：
+初代のタイプ相性表：https://wiki.ポケモン.com/wiki/相性 <br>
+上記の表から自作したcsvファイル：[type_1.csv](type_1.csv/) <br>
+初代のネットワーク：[type_network_1.png](type_network_1.png/)
 
-第2世代〜第5世代のタイプ相性表：
-上記の表から自作したcsvファイル：[type_2_to_5.csv](type_2_to_5.csv/)
-第2世代〜第5世代のネットワーク：
+第2世代〜第5世代のタイプ相性表：https://www.nintendo.co.jp/ds/ipkj/basis/pdf/pokemonHGSS_typeTable.pdf <br>
+上記の表から自作したcsvファイル：[type_2_to_5.csv](type_2_to_5.csv/)<br>
+第2世代〜第5世代のネットワーク：[type_network_2_to_5.png](type_network_2_to_5.png/)
 
-第6世代以降のタイプ相性表：
-上記の表から自作したcsvファイル：[type_6_to_9.csv](type_6_to_9.csv/)
-第6世代以降のネットワーク：
+第6世代以降のタイプ相性表：https://www.pokemon.co.jp/ex/xy/battle/01.html <br>
+上記の表から自作したcsvファイル：[type_6_to_9.csv](type_6_to_9.csv/)<br>
+第6世代以降のネットワーク：[type_network_6_to_9.png](type_network_6_to_9.png/)
 
 # コード
 
