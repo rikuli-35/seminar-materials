@@ -20,7 +20,7 @@ notionの個人サイト：https://trusting-eagle-b15.notion.site/21b2a19a047380
 →大学院のゼミで行なっているテキスト輪読のうち、私が担当した箇所の資料を掲載しています。
 
 -[02_data_analysis](02_data_analysis/)
-→ポケモンをテーマにしたデータ分析プロジェクトを行なっています。
+→データ分析プロジェクトを行なっています。
 
 -[03_programming](03_programming/) 
 →ゲーム制作のプロジェクトを行なっています。
