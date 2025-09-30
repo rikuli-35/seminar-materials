@@ -3,7 +3,7 @@
 
 -解説資料はこちら：https://trusting-eagle-b15.notion.site/21b2a19a047380f58c16eb764cfff4d5
 
-#使用したライブラリ・実行環境
+# 使用したライブラリ・実行環境
 
 -RStdio：https://posit.co/download/rstudio-desktop/
 -実行環境：macOS 13+　Windows 10/11
