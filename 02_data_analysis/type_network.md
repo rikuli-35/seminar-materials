@@ -6,6 +6,7 @@
 # 使用したライブラリ・実行環境
 
 -RStdio：https://posit.co/download/rstudio-desktop/
+
 -実行環境：macOS 13+　Windows 10/11
 
 # グラフ可視化に使用したデータ・ファイル
