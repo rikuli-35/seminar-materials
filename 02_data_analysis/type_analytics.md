@@ -30,7 +30,9 @@
 -第6世代以降のネットワーク：[type_analytics_network_6_to_9.pdf](type_analytics_network_6_to_9.pdf/)
 
 # コード解説（チュートリアル）
--[type_analytics_tutorial.rmd](type_analytics_tutorial.rmd/)
+-解説資料作成コード：[type_analytics_tutorial.rmd](type_analytics_tutorial.rmd/)
+
+-解説資料：
 
 # 結果
 -初代の次数中心性：[type_analytics_degree_graph_1.pdf](type_analytics_degree_graph_1.pdf/)
