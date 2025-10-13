@@ -2,6 +2,6 @@
 ここでは、データ分析からゲーム制作に役立つ知識を学ぶプロジェクトを行なっています。
 
 ## ファイル構成
--[type_network.md](type_network.md/)
+-[type_analytics.md](type_analytics.md/)
 
 対戦型RPGのゲームバランスについて分析を行うプロジェクトです。
