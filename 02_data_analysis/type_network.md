@@ -3,13 +3,13 @@
 
 -解説資料はこちら：https://trusting-eagle-b15.notion.site/21b2a19a047380f58c16eb764cfff4d5
 
-# 使用したライブラリ・実行環境
+# ライブラリ・実行環境
 
 -RStdio：https://posit.co/download/rstudio-desktop/
 
 -実行環境：macOS 13+　Windows 10/11
 
-# グラフ可視化に使用したデータ・ファイル
+# データセット
 
 -初代のタイプ相性表：https://wiki.ポケモン.com/wiki/相性 
 
@@ -29,10 +29,10 @@
 
 -第6世代以降のネットワーク：[type_network_6_to_9.png](type_network_6_to_9.png/)
 
-# コード
+# コード解説（チュートリアル）
 -[type_network.R](type_network.R/)
 
-# 分析に使用したグラフ
+# 結果
 -初代の次数中心性：[type_degree_graph_1.png](type_degree_graph_1.png/)
 
 -初代の媒介中心性・固有ベクトル中心性：[type_bet_vec_graph_1.png](type_bet_vec_graph_1.png/)
