@@ -31,6 +31,8 @@
 -第6世代以降のネットワーク：[type_analytics_network_6_to_9.pdf](type_analytics_network_6_to_9.pdf/)
 
 # コード解説（チュートリアル）
+※解説資料にも記載していますが、チュートリアルに沿ってコードを実行するためには、事前にcsvファイルをダウンロードする必要があります。
+
 -解説資料作成コード：[type_analytics_tutorial.rmd](type_analytics_tutorial.rmd/)
 
 -解説資料：
