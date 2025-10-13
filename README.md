@@ -9,11 +9,6 @@
 
 研究室HPはこちら：https://stack.ilas.nagoya-u.ac.jp/nakamuralab/
 
-## ポートフォリオについて
-
-このリポジトリでは、大学院での研究・プログラミングでの成果物・データの分析結果等をまとめています。内容の詳細はnotionに掲載しています。<br>
-
-notionの個人サイト：https://trusting-eagle-b15.notion.site/21b2a19a047380f58c16eb764cfff4d5
 
 ## フォルダ構成
 -[01_seminar](01_seminar/) 
