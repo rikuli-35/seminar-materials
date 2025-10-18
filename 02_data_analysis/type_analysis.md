@@ -14,7 +14,7 @@
 
 -上記の表から自作したcsvファイル：[type_analysis_1.csv](type_analysis_1.csv/) 
 
--初代のネットワーク：[type_analysis_network_1.pdf](type_analytsis_network_1.pdf/)
+-初代のネットワーク：[type_analysis_network_1.pdf](type_analysis_network_1.pdf/)
 
 -第2世代〜第5世代のタイプ相性表：https://www.nintendo.co.jp/ds/ipkj/basis/pdf/pokemonHGSS_typeTable.pdf 
 
@@ -24,7 +24,7 @@
 
 -第6世代以降のタイプ相性表：https://www.pokemon.co.jp/ex/xy/battle/01.html 
 
--上記の表から自作したcsvファイル：[type_analysis_6_to_9.csv](type_analytsis_6_to_9.csv/)
+-上記の表から自作したcsvファイル：[type_analysis_6_to_9.csv](type_analysis_6_to_9.csv/)
 
 -第6世代以降のネットワーク：[type_analysis_network_6_to_9.pdf](type_analysis_network_6_to_9.pdf/)
 
