@@ -1,0 +1,347 @@
+---
+title: "タイプ相性ネットワーク分析のグラフ作成コード　(R言語)"
+author: "名古屋大学大学院　情報学研究科　複雑系科学専攻　鈴木琳久"
+date: "2025-10-01"
+output: html_document
+---
+
+## はじめに
+
+ここでは、タイプ相性ネットワークを分析するにあたって必要な「グラフの作成」を行います。
+
+コードを以下のような手順に分けて解説します。コード全体は最後に記載しています。
+
+-   手順①：csvファイルの読み込み
+
+-   手順②：有向ネットワークの構築
+
+-   手順③：次数中心性の出力
+
+-   手順④：媒介中心性の出力
+
+-   手順⑤：固有ベクトル中心性の出力
+
+-   手順⑥：次数中心性の散布図の作成
+
+-   手順⑦：媒介中心性と固有ベクトル中心性の散布図の作成
+
+-   手順⑧：スコアの計算
+
+※注意①：実行する際は、事前にcsvファイルをダウンロードしてください。
+
+ダウンロードはこちら:<https://github.com/rikuli-35/seminar-materials/tree/main/02_data_analysis>
+
+※注意②：この説明では、初代タイプ相性をもとに作成しています。他の世代に関しても、同様の手順で行うことで結果を得られます。
+
+## 必要なパッケージの説明
+
+-   tidyverse：データ操作と分析を行うためのパッケージ
+
+-   igraph：ネットワーク構造の作成と分析を行うためのパッケージ
+
+-   tidygraph：igraphのオブジェクトを扱いやすい形式に変換するパッケージ
+
+-   ggraph：ネットワークを可視化するためのパッケージ <br>
+
+## パッケージのインストール
+
+もし、上記で説明したパッケージをダウンロードしていない場合、以下のコードを実行することで、パッケージのインストールができます。
+
+```{r package_install, eval=FALSE}
+packages <- c("tidyverse", "igraph", "ggraph", "tidygraph")
+
+installed <- packages %in% rownames(installed.packages())
+if(any(!installed)) {
+  install.packages(packages[!installed])
+}
+```
+
+## パッケージの読み込み
+
+下記のコードを実行するとパッケージを読み込むことができます。
+
+```{r package_loading, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(igraph)
+library(ggraph)
+library(tidygraph)
+```
+
+## 手順①：csvファイルの読み込み
+
+下記のコードを実行すると、読み込んだファイルの内容を「type_data」に格納します。
+
+ダウンロードしたcsvファイルを選択してください。
+
+```{r file_choose, eval=FALSE}
+type_data <- read.csv(file.choose(), stringsAsFactors = FALSE)
+```
+
+※本資料作成時には、コードが自動で実行され、ファイル選択ができないため、以下のように、ファイルを指定するコードを実行しています。
+
+```{r file_loading}
+type_data <- read.csv("type_analytics_1.csv", stringsAsFactors = FALSE)
+```
+
+## 手順②：有向ネットワークの構築
+
+下記のコードを実行すると、「type_data」の情報をもとにgraph(有向ネットワーク)が作成されます。
+
+```{r make_graph}
+graph <- graph_from_data_frame(type_data,directed=TRUE)
+```
+
+また、下記のコードを実行し、graph_tblを作成することで、graphの可視化をできるようにします。
+
+グラフの分析にはgraph、可視化にはgraph_tblを使用します。
+
+```{r convert_graph}
+graph_tbl <- as_tbl_graph(graph)
+```
+
+次に、グラフの枝の重みについて、次のように色分けを行います。 色分けは以下の通りです。
+
+黒→0倍、青→0.5倍、グレー→1倍、赤→2倍
+
+```{r edge_coloring}
+edgecolors <- c("0" = "black", "0.5" = "blue", "1" = "gray", "2" = "red")
+```
+
+そして、下記のコードを実行することで、有向ネットワークを構築することができます。
+
+```{r make_network, eval=FALSE}
+ggraph(graph_tbl,layout="circle")+geom_edge_link(aes(color=as.factor(Multiplier)),arrow=arrow(length=unit(3,'mm')),end_cap=circle(2,'mm'))+scale_edge_color_manual(values=edgecolors)+geom_node_text(aes(label=name))+theme_void()
+```
+
+以下のような図が出力されます。
+
+※タイプ数が一番少ない初代でも15タイプあるため、各頂点を円状に配置し、なるべく見やすくなるように設計しました。
+
+```{r result_network, warning = FALSE, echo = FALSE}
+ggraph(graph_tbl,layout="circle")+geom_edge_link(aes(color=as.factor(Multiplier)),arrow=arrow(length=unit(3,'mm')),end_cap=circle(2,'mm'))+scale_edge_color_manual(values=edgecolors)+geom_node_text(aes(label=name))+theme_void()
+```
+
+## 手順③：次数中心性の出力
+
+下記のコードを実行すると、各タイプの入次数の合計値が出力されます。
+
+```{r sum_indegree, eval = FALSE}
+strength(graph, mode = "in", weights = E(graph)$Multiplier)
+```
+
+以下の結果が表示されます。
+
+```{r result_indegree, echo=FALSE}
+strength(graph, mode = "in", weights = E(graph)$Multiplier)
+```
+
+また、下記のコードを実行すると、各タイプの出次数の合計値が出力されます。
+
+```{r sum_outdegree, eval = FALSE}
+strength(graph, mode = "out", weights = E(graph)$Multiplier)
+```
+
+以下のような結果が表示されます。
+
+```{r result_outdegree, echo=FALSE}
+strength(graph, mode = "out", weights = E(graph)$Multiplier)
+```
+
+## 手順④：媒介中心性の出力
+
+まず、下記のコードを実行し、各タイプの媒介中心性を計算し、「type_between」に格納します。
+
+```{r make_between}
+type_between <- betweenness(graph, directed = TRUE, weight = 1 / E(graph)$Multiplier)
+```
+
+そして、下記のコードを実行することで、計算結果を降順に並び替えて表示します。
+
+```{r sort_between, eval=FALSE}
+sort(type_between, decreasing = TRUE)
+```
+
+以下のように結果が表示されます。
+
+```{r result_between, echo=FALSE}
+sort(type_between, decreasing = TRUE)
+```
+
+## 手順⑤：固有ベクトル中心性の出力
+
+まず、下記のコードを実行し、各タイプの固有ベクトル中心性を計算し、「type_eigenvector」に格納します。
+
+```{r make_eigenvector}
+type_eigenvector <- eigen_centrality(graph, directed = TRUE, weights = E(graph)$Multiplier)$vector
+```
+
+そして、下記のコードを実行することで、計算結果を降順に並び替えて表示します。
+
+```{r sort_eigenvector, eval = FALSE}
+sort(type_eigenvector, decreasing = TRUE)
+```
+
+以下のように結果が表示されます。
+
+```{r result_eigenvector, echo=FALSE}
+sort(type_eigenvector, decreasing = TRUE)
+```
+
+## 手順⑥：入次数と出次数の散布図の作成
+
+まず、下記のコードを実行し、手順③で計算した入次数、出次数の合計値をそれぞれ「in_degree」、「out_degree」に格納します。
+
+```{r make_data(indegree_outdegree)}
+in_degree <- strength(graph, mode = "in", weights = E(graph)$Multiplier)
+out_degree <- strength(graph, mode = "out", weights = E(graph)$Multiplier)
+```
+
+次に、下記のコードを実行し、データフレームを作成します
+
+```{r make_dataframe}
+degree_data <- tibble(Type = names(in_degree), InDegree = as.numeric(in_degree), OutDegree = as.numeric(out_degree)) %>% mutate(DistanceSigned = (OutDegree - InDegree) / sqrt(2))
+```
+
+そして、下記のコードを実行することで、次数中心性の散布図を作成できます。
+
+```{r plot_indegree_outdegree, eval = FALSE}
+ggplot(degree_data, aes(x = InDegree, y = OutDegree, label = Type)) + geom_point(aes(color = DistanceSigned), size = 3) + geom_text(vjust = -0.5, size = 3) + geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") + scale_color_gradient2(low = "blue", mid = "gray", high = "red", migpoint = 0, name = "Distance") + theme_minimal() + labs(x = "InDegree", y = "OutDegree")
+```
+
+以下のような結果が得られます。
+
+グラフのx軸は入次数、y軸は出次数を表しており、入次数と出次数のバランス（相関）を視覚的に捉えるために赤色の点線(y=xの直線)を引いています。
+
+```{r result_plot(indegree_outdegree), echo=FALSE}
+ggplot(degree_data, aes(x = InDegree, y = OutDegree, label = Type)) + geom_point(aes(color = DistanceSigned), size = 3) + geom_text(vjust = -0.5, size = 3) + geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") + scale_color_gradient2(low = "blue", mid = "gray", high = "red", midpoint = 0, name = "Distance") + theme_minimal() + labs(x = "InDegree", y = "OutDegree")
+```
+
+## 手順⑦：媒介中心性と固有ベクトル中心性の散布図の作成
+
+まず、下記のコードを実行し、データフレームを作成します。
+
+```{r make_data(between_eigenvector)}
+bet_vec_data <- tibble(Type = names(type_between), Betweenness = as.numeric(type_between), Eigenvector = as.numeric(type_eigenvector))
+```
+
+そして、下記のコードを実行することで、媒介中心性と固有ベクトル中心性の散布図を作成できます。
+
+```{r plot_between_eigenvector, eval = FALSE}
+ggplot(bet_vec_data, aes(x = Eigenvector, y = Betweenness, label = Type)) + geom_point(color = "darkorange", size = 3) + geom_text(vjust = -0.5, size = 3) +  theme_minimal() + labs(x = "Eigenvector", y = "Betweenness")
+```
+
+以下のような結果が得られます。
+
+グラフのx軸は固有ベクトル中心性、y軸は媒介中心性を表しています。
+
+```{r result_plot(between_eigenvector), echo=FALSE, warning = FALSE, message=FALSE}
+ggplot(bet_vec_data, aes(x = Eigenvector, y = Betweenness, label = Type)) + geom_point(color = "darkorange", size = 3) + geom_text(vjust = -0.5, size = 3) +  theme_minimal() + labs(x = "Eigenvector", y = "Betweenness")
+```
+
+## 手順⑧：スコアの計算
+
+まず、下記のコードを実行し、次数中心性のスコアを算出します。
+
+```{r score_degree}
+score_degree <- 1 - mean(abs(degree_data$DistanceSigned)) / max(abs(degree_data$DistanceSigned))
+```
+
+次に、下記コードを実行し、媒介中心性と固有ベクトル中心性のスコアを算出します。
+
+```{r score_bet_vec}
+score_bet_vec <- 1 - abs(cor(bet_vec_data$Eigenvector, bet_vec_data$Betweenness))
+```
+
+そして、下記コードを実行し、総合スコアを算出します。
+
+```{r score_total}
+score_total <- 0.5 * score_degree + 0.5 * score_bet_vec
+```
+
+最後に、下記コードを実行し、算出した値を出力します。
+
+```{r score_all, eval = FALSE}
+cat("score_degree:", score_degree)
+cat("score_bet_vec:", score_bet_vec)
+cat("score_total:", score_total)
+```
+
+以下のような結果が得られます。
+
+```{r result_score, echo = FALSE}
+cat("score_degree:", score_degree)
+cat("score_bet_vec:", score_bet_vec)
+cat("score_total:", score_total)
+```
+
+## まとめ
+
+本資料では、タイプ相性ネットワークを構築し、各中心性の値を計算し、その値をグラフにまとめる手順とそのコードを解説しました。
+
+プロジェクトの概要の解説資料や、他のファイルでの実行結果もGitHubで一般公開してます。
+
+-　GitHubのURL：<https://github.com/rikuli-35/seminar-materials/tree/main/02_data_analysis>
+
+## コード全体
+
+```{r code, eval=FALSE}
+library(tidyverse)
+library(igraph)
+library(ggraph)
+library(tidygraph)
+
+type_data <- read.csv(file.choose(), stringsAsFactors = FALSE)
+
+graph <- graph_from_data_frame(type_data,directed=TRUE)
+graph_tbl <- as_tbl_graph(graph)
+edgecolors <- c("0" = "black", "0.5" = "blue", "1" = "gray", "2" = "red")
+ggraph(graph_tbl,layout="circle")+geom_edge_link(aes(color=as.factor(Multiplier)),arrow=arrow(length=unit(3,'mm')),end_cap=circle(2,'mm'))+scale_edge_color_manual(values=edgecolors)+geom_node_text(aes(label=name))+theme_void()
+
+strength(graph, mode = "in", weights = E(graph)$Multiplier)
+##   Normal     Fire    Water Electric    Grass      Ice Fighting   Poison 
+##     15.0     16.5     15.5     15.0     18.0     17.5     16.0     16.5 
+##   Ground   Flying  Psychic      Bug     Rock    Ghost   Dragon 
+##     16.0     15.5     14.0     17.5     17.0     13.0     14.0
+
+strength(graph, mode = "out", weights = E(graph)$Multiplier)
+##   Normal     Fire    Water Electric    Grass      Ice Fighting   Poison 
+##     13.5     16.0     16.5     14.5     15.0     18.0     15.0     15.0 
+##   Ground   Flying  Psychic      Bug     Rock    Ghost   Dragon 
+##     17.0     17.0     16.5     16.0     18.0     14.0     15.0
+
+type_between <- betweenness(graph, directed = TRUE, weight = 1 / E(graph)$Multiplier)
+sort(type_between, decreasing = TRUE)
+##      Grass       Rock        Ice     Ground        Bug     Flying   Fighting 
+## 11.9694444  9.9833333  8.4944444  6.4611111  5.3166667  4.8111111  4.4500000 
+##       Fire      Water     Poison    Psychic   Electric     Normal     Dragon 
+##  3.3444444  2.9444444  2.1250000  1.9027778  1.2777778  0.4166667  0.1111111 
+##      Ghost 
+##  0.0000000
+
+type_eigenvector <- eigen_centrality(graph, directed = TRUE, weights = E(graph)$Multiplier)$vector
+sort(type_eigenvector, decreasing = TRUE)
+##     Grass       Ice       Bug      Rock    Poison      Fire    Ground  Fighting 
+## 1.0000000 0.9640843 0.9634309 0.9412123 0.9028351 0.9025043 0.8909043 0.8667929 
+##     Water    Flying    Normal  Electric   Psychic    Dragon     Ghost 
+## 0.8529862 0.8504045 0.8339442 0.8268267 0.7878577 0.7713628 0.7016588
+
+in_degree <- strength(graph, mode = "in", weights = E(graph)$Multiplier)
+
+out_degree <- strength(graph, mode = "out", weights = E(graph)$Multiplier)
+degree_data <- tibble(Type = names(in_degree), InDegree = as.numeric(in_degree), OutDegree = as.numeric(out_degree)) %>% mutate(DistanceSigned = (OutDegree - InDegree) / sqrt(2))
+ggplot(degree_data, aes(x = InDegree, y = OutDegree, label = Type)) + geom_point(aes(color = DistanceSigned), size = 3) + geom_text(vjust = -0.5, size = 3) + geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") + scale_color_gradient2(low = "blue", mid = "gray", high = "red", migpoint = 0, name = "Distance") + theme_minimal() + labs(x = "InDegree", y = "OutDegree")
+
+bet_vec_data <- tibble(Type = names(type_between), Betweenness = as.numeric(type_between), Eigenvector = as.numeric(type_eigenvector))
+ggplot(bet_vec_data, aes(x = Eigenvector, y = Betweenness, label = Type)) + geom_point(color = "darkorange", size = 3) + geom_text(vjust = -0.5, size = 3) +  theme_minimal() + labs(x = "Eigenvector", y = "Betweenness")
+
+score_degree <- 1 - mean(abs(degree_data$DistanceSigned)) / max(abs(degree_data$DistanceSigned))
+score_bet_vec <- 1 - abs(cor(bet_vec_data$Eigenvector, bet_vec_data$Betweenness))
+score_total <- 0.5 * score_degree + 0.5 * score_bet_vec
+cat("score_degree:", score_degree)
+cat("score_bet_vec:", score_bet_vec)
+cat("score_total:", score_total)
+## score_degree: 0.5777778
+## score_bet_vec: 0.1648264
+## score_total: 0.3713021
+
+```
