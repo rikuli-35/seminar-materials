@@ -2,7 +2,7 @@
 ネットワーク分析の観点から、ゲームバランスの構成、改善について考察するプロジェクトです。<br>
 まずは、解説資料を見ていただき、プロジェクトの概要を理解していただければ幸いです。
 
--解説資料はこちら：https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analytics_tutorial.html<img width="824" height="42" alt="image" src="https://github.com/user-attachments/assets/55d8753a-862d-451e-823a-8547526a14c9" />
+-解説資料はこちら：
 
 # ライブラリ・実行環境
 
@@ -33,6 +33,7 @@
 # コード解説（チュートリアル）
 ※解説資料にも記載していますが、チュートリアルに沿ってコードを実行するためには、事前にcsvファイルをダウンロードする必要があります。
 
+-チュートリアル：https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analytics_tutorial.html<img width="824" height="42" alt="image" src="https://github.com/user-attachments/assets/55d8753a-862d-451e-823a-8547526a14c9" />
 -解説資料作成コード：[type_analytics_tutorial.html](type_analytics_tutorial.html/)
 
 # 結果
