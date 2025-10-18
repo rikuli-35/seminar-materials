@@ -4,7 +4,6 @@
 
 -解説資料はこちら：https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analytics_tutorial.html<img width="824" height="42" alt="image" src="https://github.com/user-attachments/assets/55d8753a-862d-451e-823a-8547526a14c9" />
 
-
 # ライブラリ・実行環境
 
 -RStdio：https://posit.co/download/rstudio-desktop/
@@ -35,8 +34,6 @@
 ※解説資料にも記載していますが、チュートリアルに沿ってコードを実行するためには、事前にcsvファイルをダウンロードする必要があります。
 
 -解説資料作成コード：[type_analytics_tutorial.rmd](type_analytics_tutorial.rmd/)
-
--解説資料：
 
 # 結果
 -初代の次数中心性：[type_analytics_degree_graph_1.pdf](type_analytics_degree_graph_1.pdf/)
