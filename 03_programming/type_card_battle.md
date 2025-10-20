@@ -7,4 +7,4 @@ C言語でNPU対戦型のカードゲームを自作しました。
 
 # コード
 
-コードはこちら：
+コードはこちら：[type_card_battle.c](type_card_battle.c/)
