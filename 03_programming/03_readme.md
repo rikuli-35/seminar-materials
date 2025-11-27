@@ -2,11 +2,11 @@
 ここでは、私が自作したゲームについて紹介しています。
 
 # ファイル構成
--[type_card_battle.md](type_card_battle.md)
+-[type_card_battle.md](./type_card_game/type_card_battle.md)
 
  CPUとタイプ相性カードゲームで対戦するゲームです。（デモ版と改良版があります）
 
--[dilemma.md](dilemma.md/) 
+-[dilemma.md](./dilemma/dilemma.md/) 
 
 「囚人のジレンマ」をアレンジしたゲームです。
 
