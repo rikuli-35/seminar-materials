@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run raylib game",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/type_card_battle",
+            "preLaunchTask": "build raylib game",
+            "cwd": "${workspaceFolder}",
+            "MIMode": "lldb",
+            "console": "integratedTerminal"
+        }
+    ]
+}
