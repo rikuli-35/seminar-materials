@@ -4,7 +4,7 @@ C言語でNPU対戦型のカードゲームを自作しました。（これは�
 
 まずは、下記の資料からゲームの概要を見ていただければ幸いです。
 
-デモ版の解説資料はこちら：[type_card_battle_materials.pdf](./demo/type_card_battle_materials.pdf/)
+デモ版の解説資料はこちら：[type_card_battle_materials.pdf](./demo/type_card_battle_materials.pdf)
 
 # コード
 
