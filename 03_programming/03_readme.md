@@ -4,7 +4,7 @@
 # ファイル構成
 -[type_card_battle.md](type_card_battle.md)
 
- CPUとタイプ相性カードゲームで対戦するゲームです。
+ CPUとタイプ相性カードゲームで対戦するゲームです。（デモ版と改良版があります）
 
 -[dilemma.md](dilemma.md/) 
 
