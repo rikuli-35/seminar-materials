@@ -1,7 +1,6 @@
 # 対戦型RPGのゲームバランス分析プロジェクト
 ネットワーク分析の観点から、ゲームバランスの構成、改善について考察するプロジェクトです。<br>
-まずは、解説資料を見ていただき、プロジェクトの概要を理解していただければ幸いです。
-
+下記の解説資料からプロジェクトの概要をご覧いただけます。
 - 解説資料はこちら：[type_analysis_materials.pdf](type_analysis_materials.pdf/)
 
 - RStdio：https://posit.co/download/rstudio-desktop/
