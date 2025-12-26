@@ -7,7 +7,7 @@
             "command": "clang++",
             "args": [
                 "-std=c++17",
-                "type_card_battle.cpp",
+                "*.cpp",
                 "-o",
                 "type_card_battle",
                 "-I/opt/homebrew/opt/raylib/include",
