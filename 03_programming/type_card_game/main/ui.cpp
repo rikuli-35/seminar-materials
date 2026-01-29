@@ -2,140 +2,337 @@
 #include "game.h"
 #include "raylib.h"
 
-// マウス座標の用意
+using namespace std;
+
+// マウス座標
 static Vector2 mousePoint;
 
-// システムボタン一覧
+// ウィンドウサイズ
+constexpr float W = 1280.0f;
+constexpr float H = 720.0f;
+
+// カードサイズ
+constexpr float CARD_W = W * 0.08f;
+constexpr float CARD_H = H * 0.21f;
+
+// 透明ボタン
 HitBox start_Button;
 HitBox game_explanation_Button;
 HitBox type_explanation_Button; 
+HitBox version_1_Button;
+HitBox version_2_to_5_Button;
+HitBox version_6_to_9_Button;
+HitBox version_new_Button;
+HitBox back_Button;
+HitBox draw_Button;
+HitBox handdeath_Button;
+HitBox use_Button;
+HitBox next_Button;
 
-// チャート一覧
-UIButton title_chart;
-UIButton back_ground;
+// 背景画像
+UI title_chart;
+UI back_ground_chart;
+UI version_select_chart;
+UI player_turn_field_chart;
+UI cpu_turn_field_chart;
+UI result_win_chart;
+UI result_lose_chart;
+UI result_draw_chart;
 
-/*
-// 手札
-Hand hand;
-*/
+// 背景画像の上に表示する画像
+UI back_chart;
+UI draw_chart;
+UI handdeath_chart;
+UI use_chart;
+UI card_back_chart;
+UI next_chart;
 
-// システムボタン・チャートを作成する関数
-UIButton CreateSystemButton(const char* filename, float x, float y, float scale) {
+// タイプカード
+struct TypeCard { Texture2D tex; };
+static TypeCard typecard[TYPE_COUNT];
+
+// バージョン管理
+VersionSelect purpose = VersionSelect::START_GAME;
+
+// 四角形の透明ボタンを作成する関数
+HitBox CreateRectangleHitBox(float x, float y, float w, float h) {
+
+    HitBox box;
+    box.shape = HitBoxShape::RECTANGLE;
+    box.rect = {x, y , w, h};
+    return box;
+
+}
+
+// 円の透明ボタンを作成する関数
+HitBox CreateCircleHitBox(float x, float y, float r) {
+
+    HitBox box;
+    box.shape = HitBoxShape::CIRCLE;
+    box.center = {x, y};
+    box.radius = r;
+    return box;
+
+}
+
+// UIを作成する関数
+UI CreateUI(const char* filename, float center_x, float center_y, float max_width, float max_height) {
     
-    UIButton btn;
+    UI btn;
+    
+    // 画像のロード
     btn.tex = LoadTexture(filename);
-    btn.bounds.x = x;
-    btn.bounds.y = y;
-    btn.bounds.width = btn.tex.width * scale;
-    btn.bounds.height = btn.tex.height * scale;
+
+    // 表示倍率の決定
+    float scale_w = max_width / btn.tex.width;
+    float scale_h = max_height / btn.tex.height;
+    float scale = fminf(scale_w, scale_h);
+
+    // 大きさの決定
+    float w = btn.tex.width * scale;
+    float h = btn.tex.height * scale;
+    btn.bounds = {center_x - w * 0.5f, center_y - h * 0.5f, w, h};
     
     return btn;
 
 }
 
-// 透明ボタンを作成する関数
-HitBox CreateHitBox(float x, float y, float w, float h) {
+// 作成したUIを描画する関数
+void DisplayUI(UI btn) { 
 
-    HitBox box;
-    box.bounds = {x, y , w, h};
-    return box;
+    DrawTexturePro(btn.tex, (Rectangle){0, 0, (float)btn.tex.width, (float)btn.tex.height}, btn.bounds, (Vector2){0, 0}, 0.0f, WHITE); 
 
 }
 
 /*
-// タイプボタンを作成する関数
-UIButton CreateCardButton(const char* filename) {
-
-    UIButton card;
-    card.tex = LoadTexture(filename);
-    card.bounds = (Rectangle){0, 0, (float)card.tex.width * 0.5f, (float)card.tex.height * 0.5f};
-
-    return card;
-
-}
-*/
-
 // ボタンを描画する関数
 void DrawButton(const UIButton& btn) {
 
     DrawTexturePro(btn.tex, (Rectangle){0, 0, (float)btn.tex.width, (float)btn.tex.height}, btn.bounds, (Vector2){0, 0}, 0.0f, CheckCollisionPointRec(mousePoint, btn.bounds) ? LIGHTGRAY : WHITE);
 
 }
-
-// チャートを描画する関数
-void DrawChart(UIButton btn) {
-
-    DrawTexturePro(btn.tex, (Rectangle){0, 0, (float)btn.tex.width, (float)btn.tex.height}, btn.bounds, (Vector2){0, 0}, 0.0f, WHITE);
-
-}
-
-/*
-
-// 手札を描画する関数
-void DrawHand(const std::vector<int>& cards, const Hand& layout, Rectangle area, HandView view) {
-
-    for(int i=0; i<cards.size(); i++) {
-
-        UIButton card = (view == HandView::OPEN) ? typeButtons[cards[i]] : cardback;
-        card.bounds.x = area.x + i * layout.space;
-        card.bounds.y = area.y;
-        DrawButton(card);
- 
-    }
-
-}
-
-
 */
 
-// ボタン生成（各座標はのちに設定する）
+// ボタン生成
 void InitResources() {
 
-    // システムボタンの作成
-    start_Button = CreateHitBox(325, 250, 200, 200);
-    game_explanation_Button = CreateHitBox(300, 510, 250, 140);
-    type_explanation_Button = CreateHitBox(610, 400, 250, 250);
+    // UIの作成
+    title_chart = CreateUI("UI/ai_title.png", W * 0.5f, H * 0.5f, W, H);
+    back_ground_chart = CreateUI("UI/ai_background.png", W * 0.5f, H * 0.5f, W, H);
+    version_select_chart = CreateUI("UI/ai_version_select.png", W * 0.5f, H * 0.5f, W, H);
+    player_turn_field_chart = CreateUI("UI/ai_field_player_turn.png", W * 0.5f, H * 0.5f, W, H);
+    cpu_turn_field_chart = CreateUI("UI/ai_field_cpu_turn.png", W * 0.5f, H * 0.5f, W, H);
+    result_win_chart = CreateUI("UI/ai_result_win.png", W * 0.5f, H * 0.5f, W, H);
+    result_lose_chart = CreateUI("UI/ai_result_lose.png", W * 0.5f, H * 0.5f, W, H);
+    result_draw_chart = CreateUI("UI/ai_result_draw.png", W * 0.5f, H * 0.5f, W, H);
+    
+    back_chart = CreateUI("UI/ai_back.png", W * 0.2f, H * 0.9f, W * 0.1f, H * 0.8f);
+    draw_chart = CreateUI("UI/ai_draw.png", W * 0.85f, H * 0.4f, W * 0.4f, H * 0.1f);
+    handdeath_chart = CreateUI("UI/ai_handdeath.png", W * 0.85f, H * 0.6f, W * 0.4f, H * 0.1f);
+    use_chart = CreateUI("UI/ai_use.png",W * 0.85f, H * 0.8f, W * 0.4f, H * 0.1f);
+    card_back_chart = CreateUI("UI/ai_cardback.png", W * 0.2f, H * 0.05f, W, H);
+    next_chart = CreateUI("UI/ai_next.png", W * 0.25f, H * 0.9f, W * 0.1f, H * 0.8f);
+    
+    // タイトル画面のボタン作成
+    start_Button = CreateCircleHitBox(W * 0.37f, H * 0.52f, W * 0.09f);
+    game_explanation_Button = CreateRectangleHitBox(W * 0.27f, H * 0.77f, W * 0.2f, H * 0.18f);
+    type_explanation_Button = CreateCircleHitBox(W * 0.63f, H * 0.78f, W * 0.09f);
+    
+    // バージョン選択画面のボタン作成
+    version_1_Button = CreateRectangleHitBox(W * 0.4f, H * 0.07f, W * 0.2f, H * 0.13f);
+    version_2_to_5_Button = CreateRectangleHitBox(W * 0.4f, H * 0.3f, W * 0.2f, H * 0.13f);
+    version_6_to_9_Button = CreateRectangleHitBox(W * 0.4f, H * 0.53f, W * 0.2f, H * 0.13f);
+    version_new_Button = CreateRectangleHitBox(W * 0.4f, H * 0.76f, W * 0.2f, H * 0.13f);
+    back_Button = CreateRectangleHitBox(W * 0.23f, H * 0.90f, W * 0.11f, H * 0.077f);
 
-    // チャートの作成
-    title_chart = CreateSystemButton("UI/ai_title.png", 250, 5, 0.8f);
-    back_ground = CreateSystemButton("UI/ai_background.png", 0, 0, 0.8f);
-
-    /*
+    // ゲーム画面のボタン作成(位置未定) 
+    draw_Button = CreateRectangleHitBox(W * 0.79f, H * 0.35f, W * 0.12f, H * 0.1f);
+    handdeath_Button = CreateRectangleHitBox(W * 0.79f, H * 0.55f, W * 0.12f, H * 0.1f);
+    use_Button = CreateRectangleHitBox(W * 0.79f, H * 0.75f, W * 0.12f, H * 0.1f);
+    next_Button = CreateRectangleHitBox(W * 0.23f, H * 0.90f, W * 0.11f, H * 0.077f);
+    
     // タイプカード一覧
+    static_assert(TYPE_COUNT == 19, "mismatch");
     const char* typefiles[TYPE_COUNT] = {
 
-        "UI/type/normal_button.png", "UI/type/fire_button.png", "UI/type/water_button.png", "UI/type/electric_button.png", "UI/type/grass_button.png",
-        "UI/type/ice_button.png", "UI/type/fighting_button.png", "UI/type/poison_button.png", "UI/type/ground_button.png", "UI/type/flying_button.png",
-        "UI/type/psychic_button.png", "UI/type/bug_button.png", "UI/type/rock_button.png", "UI/type/ghost_button.png", "UI/type/dragon_button.png",
-        "UI/type/dark_button.png", "UI/type/steel_button.png", "UI/type/fairy_button.png"
+        "UI/type/normal_card.png", "UI/type/fire_card.png", "UI/type/water_card.png", "UI/type/electric_card.png", "UI/type/grass_card.png",
+        "UI/type/ice_card.png", "UI/type/fighting_card.png", "UI/type/poison_card.png", "UI/type/ground_card.png", "UI/type/flying_card.png",
+        "UI/type/psychic_card.png", "UI/type/bug_card.png", "UI/type/rock_card.png", "UI/type/ghost_card.png", "UI/type/dragon_card.png",
+        "UI/type/dark_card.png", "UI/type/steel_card.png", "UI/type/fairy_card.png","UI/type/unknown.png"
 
     };
 
     // タイプカードの作成
     for(int i=0; i<TYPE_COUNT; i++) {
 
-        typeButtons[i] = CreateCardButton(typefiles[i]);
+        typecard[i].tex = LoadTexture(typefiles[i]);
+        if(typecard[i].tex.id == 0) TraceLog(LOG_ERROR, "Failed %d", i); 
 
     }
-    cardback = CreateCardButton("UI/type/cpu_card.png");
 
-    // 手札の作成
-    hand.player_area = {100, 500, 800, 150};
-    hand.cpu_area = {100, 100, 800, 150};
-    hand.space = 120;
+}
 
-    */
+// カードの表示位置を計算する関数
+void DrawHandCards(const vector<Type>& cards, float x, float y, float space, HandView view) {
+
+    for(int i=0; i<cards.size(); i++) {
+
+        Type type = cards[i];
+        int num = static_cast<int>(type);
+        if(num < 0 || num >= TYPE_COUNT) continue;
+
+        Rectangle DrawArea {x + i * space, y, CARD_W, CARD_H};
+        Texture2D& tex = (view == HandView::OPEN) ? typecard[num].tex : card_back_chart.tex;
+        Rectangle src {0, 0, (float)tex.width, (float)tex.height};
+
+        DrawTexturePro(tex, src, DrawArea, {0, 0}, 0.0f, WHITE);
+
+        // デバッグ用
+        DrawRectangleLinesEx(DrawArea, 2, GREEN);
+
+    }
+
+}
+
+// フィールドを描画する関数
+void DrawField(GameData& game) {
+
+    // 現在のターンを検索
+    bool PlayerTurn = (game.current_turn == PlayerID::PLAYER);
+
+    // フィールド画像の読み込み
+    if(PlayerTurn) DisplayUI(player_turn_field_chart);
+    else DisplayUI(cpu_turn_field_chart);
+    
+    // ターン数の表示
+    DrawText(TextFormat("%d", game.round), W * 0.735f, H * 0.48f, 32, BLACK);
+
+}
+
+// プレイヤーカードを描画する関数
+void DrawPlayerHand(GameData& game) {
+
+    Player& player = game.players[static_cast<int>(PlayerID::PLAYER)];
+    float x = W * 0.25f;
+    float y = H * 0.75f;
+    float space = W * 0.09;
+
+    DrawHandCards(player.hand, x, y, space, HandView::OPEN);
+
+}
+
+// CPUカードを描画する関数
+void DrawCpuHand(GameData& game) {
+    
+    Player& cpu = game.players[static_cast<int>(PlayerID::CPU)];
+    float x = W * 0.28f;
+    float y = W * 0.01f;
+    float space = W * 0.09;
+
+    DrawHandCards(cpu.hand, x, y, space, HandView::CLOSE);
+    
 }
 
 // マウスの接触判定を行う関数
 bool IsButtonClicked(const HitBox& btn) {
 
-    return (CheckCollisionPointRec(mousePoint, btn.bounds) && IsMouseButtonReleased(MOUSE_BUTTON_LEFT));
+    bool hit = false;
+    switch(btn.shape) {
+
+        case HitBoxShape::RECTANGLE: {
+
+            hit = CheckCollisionPointRec(mousePoint, btn.rect);
+            break;
+
+        }
+
+        case HitBoxShape::CIRCLE: {
+
+            hit = CheckCollisionPointCircle(mousePoint, btn.center, btn.radius);
+            break;
+
+        }
+    }
+
+    return (hit && IsMouseButtonReleased(MOUSE_BUTTON_LEFT));
     
 }
 
+// ラウンド結果を描画する関数
+void DrawRoundResult(GameData& game) {
+
+    DrawText(TextFormat("ROUND %d", game.round), H * 0.5, W * 0.5, 40, WHITE);
+
+    // 使用した手札を表示
+    CreateUI(???); // プレイヤーの手札
+    DrawText("VS", H * 0.5, W * 0.7, 40, BLACK);
+    CreateUI(???); // CPUの手札
+
+    // 現在のスコアを表示
+    DrawText(TextFormat("YOU: %d (+%d)"), game.players[PlayerID::PLAYER].score, ???); //得点計算の値を入れたい
+    DrawText(TextFormat("CPU: %d (+%d)"), game.players[PlayerID::CPU].score, ???)
+
+}
+
+// デバック用関数(透明ボタンの確認)
+void DrawHitBoxDebug(const HitBox& btn) {
+
+    if(btn.shape == HitBoxShape::RECTANGLE) DrawRectangleLinesEx(btn.rect, 2, RED);
+    else DrawCircleLines((int)btn.center.x, (int)btn.center.y, btn.radius, GREEN);
+    
+}
+
+// ゲーム内描画を行う関数
+void DrawGame(GameData& game) {
+
+    switch(game.state) {
+
+        case GameState::SELECT_PHASE: {
+
+            DrawCpuHand(game);
+            DrawPlayerHand(game);
+            
+            break;
+
+        }
+
+        case GameState::ROUND_RESULT: {
+
+            DrawText("RESULT",400,100,40,WHITE);
+            // 選ばれたカードを表示＋スコアの表示
+            break;
+
+        }
+
+        /*
+        case GameState::ROUND_EFFECT: {
+
+            break;
+
+        }
+        */
+
+        default: break;
+
+    }
+
+}
+
+// デバッグ用(画面遷移バグ発見)
+void DrawDebugStatus(UIState ui, GameData& game) {
+    
+    DrawRectangle(10, 10, 300, 150, Fade(BLACK, 0.6f));
+
+    DrawText(TextFormat("UI State: %d", (int)ui), 20, 20, 20, RAYWHITE);
+    DrawText(TextFormat("Game State: %d", (int)game.state), 20, 45, 20, RAYWHITE);
+    DrawText(TextFormat("Command: %d", (int)game.command), 20, 70, 20, RAYWHITE);
+    DrawText(TextFormat("Player Prepared: %s", game.player_prepared ? "YES" : "NO"), 20, 95, 20, RAYWHITE);
+    DrawText(TextFormat("Round: %d", game.round), 20, 120, 20, RAYWHITE);
+
+}
+
 // UIの更新処理
-UIEvent UpdateUI(UIState state) {
+UIEvent UpdateUI(UIState state, GameData& game) {
     
     // マウスの位置取得
     mousePoint = GetMousePosition();
@@ -146,22 +343,60 @@ UIEvent UpdateUI(UIState state) {
         // タイトル画面
         case UIState::TITLE: {
 
-            if(IsButtonClicked(start_Button)) return UIEvent::game_start;
+            if(IsButtonClicked(start_Button)) {
+
+                purpose = VersionSelect::START_GAME;
+                return UIEvent::open_version_select;
+
+            }
+
             if(IsButtonClicked(game_explanation_Button)) return UIEvent::open_explanation;
-            if(IsButtonClicked(type_explanation_Button)) return UIEvent::open_type_chart;
+
+            if(IsButtonClicked(type_explanation_Button)) {
+                
+                purpose = VersionSelect::OPEN_CHART;
+                return UIEvent::open_type_chart;
+
+            }
+
             break;
 
         }
         
-        /*
+        
         // バージョン選択画面
         case UIState::VERSION_SELECT: {
 
-            if(IsButtonClicked(version_1_Button)) return UIEvent::select_v1;
-            if(IsButtonClicked(version_2_to_5_Button)) return UIEvent::select_v2_to_v5;
-            if(IsButtonClicked(version_6_to_9_Button)) return UIEvent::select_v6_to_v9;
-            if(IsButtonClicked(version_new_Button)) return UIEvent::select_new;
+            if(IsButtonClicked(version_1_Button)) {
+                
+                if(purpose == VersionSelect::START_GAME) return UIEvent::game_start;
+                if(purpose == VersionSelect::OPEN_CHART) return UIEvent::open_type_chart_1;
+
+            }
+               
+            if(IsButtonClicked(version_2_to_5_Button)) {
+                
+                if(purpose == VersionSelect::START_GAME) return UIEvent::game_start;
+                if(purpose == VersionSelect::OPEN_CHART) return UIEvent::open_type_chart_2_to_5;
+
+            }
+
+            if(IsButtonClicked(version_6_to_9_Button)) {
+                
+                if(purpose == VersionSelect::START_GAME) return UIEvent::game_start;
+                if(purpose == VersionSelect::OPEN_CHART) return UIEvent::open_type_chart_6_to_9;
+
+            }
+
+            if(IsButtonClicked(version_new_Button)) {
+                
+                if(purpose == VersionSelect::START_GAME) return UIEvent::game_start;
+                if(purpose == VersionSelect::OPEN_CHART) return UIEvent::open_type_chart_new;
+
+            }
+
             if(IsButtonClicked(back_Button)) return UIEvent::back;
+
             break;
 
         }
@@ -169,11 +404,12 @@ UIEvent UpdateUI(UIState state) {
         // ゲーム説明画面
         case UIState::GAME_EXPLANATION: {
 
-            if(IsButtonClicked(back_to_title_Button)) return UIEvent::back;
+            if(IsButtonClicked(back_Button)) return UIEvent::back;
             break;
 
         }
 
+        /*
         // 得点表バージョン選択画面
         case UIState::TYPE_CHART_EXPLANATION: {
 
@@ -196,31 +432,64 @@ UIEvent UpdateUI(UIState state) {
             break;
 
         }
-
+        */
         // ゲーム画面
         case UIState::IN_GAME: {
 
-            if(IsButtonClicked(draw_Button)) return UIEvent::draw;
-            if(IsButtonClicked(handdeath_Button)) return UIEvent::handdeath;
-            if(IsButtonClicked(use_Button)) return UIEvent::use;
+            switch(game.state) {
+                
+                case GameState::DRAW_OR_HANDDEATH: {
+
+                    if(IsButtonClicked(draw_Button)) return UIEvent::draw;
+                    if(IsButtonClicked(handdeath_Button)) return UIEvent::handdeath;
+                    break;
+
+                }
+
+                case GameState::SELECT_PHASE: {
+
+                    if(IsButtonClicked(use_Button)) return UIEvent::use;
+
+                    Player& player = game.players[(int)PlayerID::PLAYER];
+                    int use_count = (game.current_turn == PlayerID::PLAYER) ? 2 : 1;
+
+                    float x = W * 0.25;
+                    float y = H * 0.75f;
+                    float space = W * 0.09f;
+
+                    for(int i=0; i<(int)player.hand.size(); i++) {
+
+                        Rectangle card_area = {x + i * space, y, CARD_W, CARD_H};
+                        if(CheckCollisionPointRec(mousePoint, card_area) && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) PlayerSelect(game, i, use_count);
+
+                    }
+
+                    break;
+                
+                }
+
+                default: break;
+
+            }
+
             break;
 
         }
-
+        
         // リザルト画面
         case UIState::RESULT: {
 
-            if(IsButtonClicked(next_round_Button)) return UIEvent::next_round;
+            if(IsButtonClicked(next_Button)) return UIEvent::next_round;
             break;
 
         }
 
+        /*
         case UIState::END: {
 
             // if(IsButtonClicked(back_to_title_Button)) return UIEvent::game_start;
             break;
         }
-
         */
 
     }
@@ -237,53 +506,43 @@ void DrawUI(UIState ui, GameData& game) {
         // タイトル画面
         case UIState::TITLE: {
 
-            DrawChart(title_chart);
-            DrawRectangleLinesEx(start_Button.bounds, 2, RED);
-            DrawRectangleLinesEx(game_explanation_Button.bounds, 2, BLUE);
-            DrawRectangleLinesEx(type_explanation_Button.bounds, 2, GREEN);
+            DisplayUI(title_chart);
+            DrawHitBoxDebug(start_Button);
+            DrawHitBoxDebug(game_explanation_Button);
+            DrawHitBoxDebug(type_explanation_Button);
             break;
 
         }
 
-        /*
         // バージョン選択画面
-        case UIState::VERSION_SELECT: {
+        case UIState::VERSION_SELECT: 
+        case UIState::TYPE_CHART_EXPLANATION: {
 
-            DrawButton(back_Button);
+            DisplayUI(version_select_chart);
+            DrawHitBoxDebug(version_1_Button);
+            DrawHitBoxDebug(version_2_to_5_Button);
+            DrawHitBoxDebug(version_6_to_9_Button);
+            DrawHitBoxDebug(version_new_Button);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
 
         // ゲーム説明画面
         case UIState::GAME_EXPLANATION: {
-
-            DrawButton(version_1_Button);
-            DrawButton(version_2_to_5_Button);
-            DrawButton(version_6_to_9_Button);
-            DrawButton(version_new_Button);
-            DrawChart(explanation_chart);
-            DrawButton(back_Button);
+            
+            DisplayUI(back_ground_chart);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
         
-        // タイプ相性確認画面
-        case UIState::TYPE_CHART_EXPLANATION: {
-
-            DrawButton(version_1_Button);
-            DrawButton(version_2_to_5_Button);
-            DrawButton(version_6_to_9_Button);
-            DrawButton(version_new_Button);
-            DrawButton(back_Button);
-            break;
-
-        }
-
+        /*
         // タイプ相性バージョン１
         case UIState::TYPE_CHART_1: {
 
             DrawChart(type_chart_1);
-            DrawButton(back_Button);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
@@ -292,7 +551,7 @@ void DrawUI(UIState ui, GameData& game) {
         case UIState::TYPE_CHART_2_TO_5: {
 
             DrawChart(type_chart_2_to_5);
-            DrawButton(back_Button);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
@@ -301,7 +560,7 @@ void DrawUI(UIState ui, GameData& game) {
         case UIState::TYPE_CHART_6_TO_9: {
 
             DrawChart(type_chart_6_to_9);
-            DrawButton(back_Button);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
@@ -310,20 +569,44 @@ void DrawUI(UIState ui, GameData& game) {
         case UIState::TYPE_CHART_NEW: {
 
             DrawChart(type_chart_new);
-            DrawButton(back_Button);
+            DrawHitBoxDebug(back_Button);
             break;
 
         }
 
+        */
+
         // ゲーム画面
         case UIState::IN_GAME:  { 
 
-            DrawChart(game_field);
-            DrawHand(game.players[static_cast<int>(PlayerID::PLAYER)].hand, hand, hand.player_area, HandView::OPEN);
-            DrawHand(game.players[static_cast<int>(PlayerID::CPU)].hand, hand, hand.cpu_area, HandView::CLOSE);
-            DrawButton(use_Button);
-            if(game.attacker == PlayerID::PLAYER) DrawChart(you_are_attack_chart);
-            else DrawChart(you_are_defense_chart);
+            DrawField(game);
+            DrawGame(game);
+
+            if(game.state == GameState::DRAW_OR_HANDDEATH) {
+
+                DisplayUI(draw_chart);
+                DisplayUI(handdeath_chart);
+                DrawHitBoxDebug(draw_Button);
+                DrawHitBoxDebug(handdeath_Button);
+
+            }
+
+            if(game.state == GameState::SELECT_PHASE) {
+
+                DisplayUI(use_chart);
+                DrawHitBoxDebug(use_Button);
+
+            }
+
+            // デバック用
+            DrawText(TextFormat("STATE: %d", (int)game.state),20, 20, 20, DARKGRAY);
+
+            DrawText(TextFormat("ROUND: %d", game.round),20, 45, 20, DARKGRAY);
+
+            DrawText(TextFormat("TURN: %s", game.current_turn == PlayerID::PLAYER ? "PLAYER" : "CPU"),20, 70, 20, DARKGRAY);
+
+            DrawText(TextFormat("SELECTED: %d", game.players[(int)PlayerID::PLAYER].select.size()), 20, 100, 20, RED);
+            
             break;
 
         }
@@ -331,7 +614,17 @@ void DrawUI(UIState ui, GameData& game) {
         // ラウンドリザルト画面
         case UIState::RESULT: {
 
-            DrawButton(next_round_Button);
+            DisplayUI(next_chart);
+            DrawHitBoxDebug(next_Button);
+
+            /*
+            if(IsButtonClicked(next_Button)) {
+
+                game.command = GameCommand::NEXT_ROUND;
+                
+            }
+            */
+
             break;
 
         }
@@ -339,16 +632,18 @@ void DrawUI(UIState ui, GameData& game) {
         // 最終結果画面
         case UIState::END: { 
 
-            if(game.players[static_cast<int>(PlayerID::PLAYER)].score > game.players[static_cast<int>(PlayerID::CPU)].score) DrawChart(you_win_chart);
-            else if(game.players[static_cast<int>(PlayerID::PLAYER)].score < game.players[static_cast<int>(PlayerID::CPU)].score) DrawChart(you_lose_chart);
-            else DrawChart(draw_chart);
+            /*
+            if(game.players[static_cast<int>(PlayerID::PLAYER)].score > game.players[static_cast<int>(PlayerID::CPU)].score) DisplayUI(result_win_chart);
+            else if(game.players[static_cast<int>(PlayerID::PLAYER)].score < game.players[static_cast<int>(PlayerID::CPU)].score) DisplayUI(result_lose_chart);
+            else DisplayUI(result_draw_chart);
+            */
             break;
 
         }
 
-        */
-
     }
+
+    DrawDebugStatus(ui, game);
 
 }
 
@@ -356,11 +651,23 @@ void DrawUI(UIState ui, GameData& game) {
 void UnloadResources() {
 
     UnloadTexture(title_chart.tex);
-
-    // for(int i=0; i<TYPE_COUNT; i++) UnloadTexture(typeButtons[i].tex);
+    UnloadTexture(back_ground_chart.tex);
+    UnloadTexture(version_select_chart.tex);
+    UnloadTexture(player_turn_field_chart.tex);
+    UnloadTexture(cpu_turn_field_chart.tex);
+    UnloadTexture(draw_chart.tex);
+    UnloadTexture(handdeath_chart.tex);
+    UnloadTexture(use_chart.tex);
+    UnloadTexture(card_back_chart.tex);
+    UnloadTexture(next_chart.tex);
+    /*
+    UnloadTexture(result_win_chart);
+    UnloadTexture(result_lose_chart);
+    UnloadTexture(result_draw_chart);
+    */
+    
+    for(int i=0; i<TYPE_COUNT; i++) UnloadTexture(typecard[i].tex);
    
 
 }
-
-
 
