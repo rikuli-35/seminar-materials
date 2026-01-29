@@ -6,7 +6,7 @@ C・C++言語でNPC対戦型のカードゲームを自作しました。
 
 - デモ版の解説資料：[type_card_battle_materials.pdf](./demo/type_card_battle_materials.pdf)
 
-- メイン版の解説資料（現在制作中）：
+- メイン版の解説資料（現在コード制作中のため、設計についてのみ記載）：
 
 # 実装コード
 
