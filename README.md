@@ -54,6 +54,6 @@ R言語：RStudio(macOS/Windows)
 
 C/C++言語：Visual Studio Code
 
-UI：raylib
+UI(ゲーム制作)：raylib
 
 ---
