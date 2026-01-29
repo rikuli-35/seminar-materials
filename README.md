@@ -38,6 +38,10 @@
 
 ・解説資料：[JASLA2025.pdf](01_seminar/JASLA2025.pdf)
 
+<p align="center">
+  <img src="01_seminar/seminar_logo.png" style="height:200px; width="240">
+</p>
+
 ## 使用環境
 
 <p align="left">
