@@ -1,26 +1,35 @@
+## 概要
+
+データ分析・ゲーム制作・学術研究での成果物をまとめています。
+
+・データ分析：[type_analysis.md](02_data_analysis/type_analysis.md)　
+
+・ゲーム制作：[type_card_battle.md](03_programming/type_card_battle.md) 
+
+・学術研究：[seminar.md](01_seminar/seminar/md)
+
+
 ## プロジェクトの概要
 
-①対戦型RPGのタイプ相性についてネットワーク分析を行い、「ゲームバランス」をスコア化・評価
+### ① 対戦型RPGのタイプ相性ネットワーク分析(データ分析作品)
+
+対戦型RPGのタイプ相性についてネットワーク分析を行い、「ゲームバランス」という曖昧な概念をスコア化・評価しました。
 
 ・解説資料：[type_analysis_material(simple_version).pdf](02_data_analisis/type_analysis_material(simple_version).pdf)
 
 ・分析チュートリアル：
 
-②対戦型RPGのタイプ相性をテーマとした、対NPC型のカードゲームを制作
+### ② タイプ相性カードゲームの制作（ゲーム作品）
 
--[type_card_battle_material(simple_version).pdf](03_programming/main/type_card_battle2_1.pdf)
+対戦型RPGのタイプ相性をテーマとしたカードゲームを制作しました。
 
-③学習者の学習ログから、「いつ」課題に取り組んでいるかの分析
+・解説資料：[type_card_battle_material(simple_version).pdf](03_programming/main/type_card_battle2_1.pdf)
 
--[JASLA2025.pdf](01_seminar/JASLA2025.pdf)
+### ③学習分析(学術研究)
 
-## プロジェクトの構成
+学習者の学習履歴から「いつ」課題に取り組んだのかを分析しました。
 
-①データ分析プロジェクト[type_analysis.md](02_data_analysis/type_analysis.md)　
-
-②ゲーム制作プロジェクト[type_card_battle.md](03_programming/type_card_battle.md) 
-
-③大学院/学会での取り組み[seminar.md](01_seminar/seminar/md)
+・解説資料：[JASLA2025.pdf](01_seminar/JASLA2025.pdf)
 
 ## 使用環境
 
@@ -41,10 +50,10 @@
 </p>
 
 
-R言語：[RStudio(macOS/Windows 13)]
+R言語：RStudio(macOS/Windows)
 
-C/C++言語：[Visual Studio Code]
+C/C++言語：Visual Studio Code
 
-UI：[raylib](https://www.raylib.com/)
+UI：raylib
 
 ---
