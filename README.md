@@ -35,7 +35,7 @@
     <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white">
   </a>
   <a href="https://www.raylib.com/">
-  <img src="docs/images/raylib.svg" height="28">
+  <img src="03_programming/type_card_game/main/UI/raylib.svg" height="28">
 </a>
 
 </p>
