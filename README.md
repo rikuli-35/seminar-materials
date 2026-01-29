@@ -4,7 +4,7 @@
 
 ・データ分析：[type_analysis.md](02_data_analysis/type_analysis.md)　
 
-・ゲーム制作：[type_card_battle.md](03_programming/type_card_battle.md) 
+・ゲーム制作：[type_card_battle.md](03_programming/type_card_game/type_card_battle.md) 
 
 ・学術研究：[seminar.md](01_seminar/seminar/md)
 
