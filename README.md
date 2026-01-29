@@ -17,7 +17,7 @@
 
 ・解説資料：[type_analysis_material(simple_version).pdf](02_data_analysis/type_analysis_material(simple_version).pdf)
 
-・分析チュートリアル：
+・分析チュートリアル：https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
 
 <p align="center">
   <img src="02_data_analysis/type_analysis_logo.png" style="height:200px; width="240">
