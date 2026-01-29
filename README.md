@@ -19,6 +19,12 @@
 
 ・分析チュートリアル：
 
+<p align="center">
+  <img src="02_data_analysis/type_analysis_logo.png" width="300">
+</p>
+
+
+
 ### ② タイプ相性カードゲームの制作（ゲーム作品）
 
 対戦型RPGのタイプ相性をテーマとしたカードゲームを制作しました。
