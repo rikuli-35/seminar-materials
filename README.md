@@ -35,12 +35,10 @@
     <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white">
   </a>
   <a href="https://www.raylib.com/">
-  <img src="03_programming/type_card_game/main/UI/raylib.svg" height="28">
+  <img src="03_programming/type_card_game/main/UI/raylib.icns" height="28">
 </a>
 
 </p>
-
-
 
 
 R言語：[RStudio(macOS/Windows 13)]
