@@ -1,7 +1,12 @@
 # 対戦型RPGのゲームバランス分析プロジェクト
-ネットワーク分析の観点から、ゲームバランスの構成、改善について考察するプロジェクトです。<br>
-下記の解説資料からプロジェクトの概要をご覧いただけます。
-- 解説資料(詳細版) はこちら：[type_analysis_materials.pdf](type_analysis_materials.pdf/)
+
+ネットワーク分析の観点から、ゲームバランスの構成、改善について考察するプロジェクトです。
+
+下記の解説資料からプロジェクトの概要をご覧いただけます。（簡易版推奨）
+
+- 解説資料(簡易版)：[type_analysis_material(simple_version).pdf](type_analysis_material(simple_version).pdf/)
+
+- 解説資料(詳細版) ：[type_analysis_materials.pdf](type_analysis_materials.pdf/)
 
 - RStdio：https://posit.co/download/rstudio-desktop/
 
@@ -31,10 +36,7 @@
 ※チュートリアルに沿ってコードを実行するためには、事前にcsvファイルをダウンロードする必要があります。
 
 - チュートリアル：  
-  <a href="https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html">
-    https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
-  </a>
-</p>
+  https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
 
 - 解説資料作成コード：[type_analysis_tutorial.html](type_analysis_tutorial.html/)
 
