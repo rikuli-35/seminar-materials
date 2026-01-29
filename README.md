@@ -23,7 +23,7 @@
 
 対戦型RPGのタイプ相性をテーマとしたカードゲームを制作しました。
 
-・解説資料：[type_card_battle_material(simple_version).pdf](03_programming/main/type_card_battle2_1.pdf)
+・解説資料：[type_card_battle_material(simple_version).pdf](03_programming/type_card_game/main/type_card_battle2_1.pdf)
 
 ### ③学習分析(学術研究)
 
