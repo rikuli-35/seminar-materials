@@ -31,12 +31,12 @@
 ※チュートリアルに沿ってコードを実行するためには、事前にcsvファイルをダウンロードする必要があります。
 
 - チュートリアル：  
-https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
-<img width="824" height="42" alt="image" src="https://github.com/user-attachments/assets/55d8753a-862d-451e-823a-8547526a14c9" />
+  <a href="https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html">
+    https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
+  </a>
+</p>
 
 - 解説資料作成コード：[type_analysis_tutorial.html](type_analysis_tutorial.html/)
-
-
 
 # 結果
 - 初代の次数中心性：[type_analysis_degree_graph_1.pdf](type_analysis_degree_graph_1.pdf/)
