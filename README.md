@@ -25,11 +25,21 @@
 ## 使用環境
 
 <p align="left">
-  <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white">
-  <img src="https://img.shields.io/badge/C-00599C?logo=c&logoColor=white">
-  <img src="https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white">
-  <img src="assets/raylib.svg" height="28">
+  <a href="https://en.cppreference.com/w/c">
+    <img src="https://img.shields.io/badge/C-00599C?logo=c&logoColor=white">
+  </a>
+  <a href="https://isocpp.org/">
+    <img src="https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white">
+  </a>
+  <a href="https://www.r-project.org/">
+    <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white">
+  </a>
+  <a href="https://www.raylib.com/">
+  <img src="docs/images/raylib.svg" height="28">
+</a>
+
 </p>
+
 
 
 
