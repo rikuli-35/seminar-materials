@@ -20,9 +20,10 @@
 ・分析チュートリアル：
 
 <p align="center">
-  <img src="02_data_analysis/type_analysis_logo.png" width="300">
+  <img src="02_data_analysis/type_analysis_logo.png" style="height:200px; width="240">
+  <img src="02_data_analysis/type_analysis_logo2.png" style="height:200px; width="240">
+  <img src="02_data_analysis/type_analysis_logo3.png" style="height:200px; width="240">
 </p>
-
 
 
 ### ② タイプ相性カードゲームの制作（ゲーム作品）
