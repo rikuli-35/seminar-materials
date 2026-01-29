@@ -15,7 +15,7 @@
 
 対戦型RPGのタイプ相性についてネットワーク分析を行い、「ゲームバランス」という曖昧な概念をスコア化・評価しました。
 
-・解説資料：[type_analysis_material(simple_version).pdf](02_data_analisis/type_analysis_material(simple_version).pdf)
+・解説資料：[type_analysis_material(simple_version).pdf](02_data_analysis/type_analysis_material(simple_version).pdf)
 
 ・分析チュートリアル：
 
