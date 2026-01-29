@@ -2,48 +2,6 @@
 #include "game.h"
 #include "ui.h"
 
-// ゲーム全体の状態管理
-void GameStateManagement(GameData& game) {
-
-    switch(game.state) {
-
-        case GameState::COIN_TOSS: {
-
-            game.state = GameState::ROUND_START;
-            break;
-
-        }
-
-        case GameState::ROUND_START: {
-
-            if(game.round_ready) game.state = GameState::TURN;
-            break;
-
-        }
-
-        case GameState::TURN: {
-
-            if(IsRoundFinished(game)) game.state = GameState::ROUND_RESULT;
-            break;
-
-        }
-
-        case GameState::ROUND_RESULT: {
-
-            break;
-
-        }
-
-        case GameState::GAME_END: {
-
-            break;
-
-        }
-
-    }
-
-}
-
 // UIの全体の状態管理
 void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 
@@ -51,71 +9,130 @@ void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 
         case UIEvent::game_start: {
 
-            game.state = GameState::COIN_TOSS;
+            LoadVersion(game.version, game);
+            InitGame(game);
+            ui = UIState::IN_GAME;
+            break;
+
+        }
+
+        case UIEvent::open_explanation: {
+
+            ui = UIState::GAME_EXPLANATION;
+            break;
+
+        }
+
+        case UIEvent::open_version_select:
+        case UIEvent::open_type_chart: {
+
             ui = UIState::VERSION_SELECT;
             break;
 
         }
 
-        case UIEvent::select_v1: {
+        case UIEvent::open_type_chart_1: {
 
-            LoadVersion(GameVersion::V1, game);
-            InitGame(game);
-            ui = UIState::IN_GAME;
+            ui = UIState::TYPE_CHART_1;
             break;
 
         }
 
-        case UIEvent::select_v2_to_v5: {
+        case UIEvent::open_type_chart_2_to_5: {
 
-            LoadVersion(GameVersion::V2_TO_5, game);
-            InitGame(game);
-            ui = UIState::IN_GAME;
+            ui = UIState::TYPE_CHART_2_TO_5;
             break;
             
         }
 
-        case UIEvent::select_v6_to_v9: {
+        case UIEvent::open_type_chart_6_to_9: {
 
-            LoadVersion(GameVersion::V6_TO_9, game);
-            InitGame(game);
-            ui = UIState::IN_GAME;
+            ui = UIState::TYPE_CHART_6_TO_9;
             break;
             
         }
 
-        case UIEvent::select_new: {
+        case UIEvent::open_type_chart_new: {
 
-            LoadVersion(GameVersion::NEW, game);
-            InitGame(game);
-            ui = UIState::IN_GAME;
+            ui = UIState::TYPE_CHART_NEW;
             break;
+            
+        }
+
+        case UIEvent::back: {
+
+            switch(ui) {
+
+                case UIState::VERSION_SELECT: {
+
+                    ui = UIState::TITLE;
+                    break;
+
+                }
+
+                case UIState::GAME_EXPLANATION: {
+
+                    ui = UIState::TITLE;
+                    break;
+
+                }
+
+                case UIState::TYPE_CHART_1:
+                case UIState::TYPE_CHART_2_TO_5:
+                case UIState::TYPE_CHART_6_TO_9:
+                case UIState::TYPE_CHART_NEW: {
+
+                    ui = UIState::VERSION_SELECT;
+                    break;
+
+                }
+
+                default: {
+
+                    ui = UIState::TITLE;
+                    break;
+
+                }
+
+                break;
+
+            }
             
         }
 
         case UIEvent::draw: {
 
-            if(ui == UIState::IN_GAME) HandDraw(game, PlayerID::PLAYER);
+            if(ui == UIState::IN_GAME && game.state == GameState::DRAW_OR_HANDDEATH) game.command = GameCommand::DRAW;
             break;
 
         }
 
         case UIEvent::handdeath: {
 
-            if(ui == UIState::IN_GAME) HandDeath(game, PlayerID::CPU);
+            if(ui == UIState::IN_GAME && game.state == GameState::DRAW_OR_HANDDEATH) game.command = GameCommand::HANDDEATH;
+            break;
+
+        }
+
+        case UIEvent::use: {
+
+            if(ui == UIState::IN_GAME) game.command = GameCommand::USE;
+            break;
+
+        }
+
+        case UIEvent::round_result: {
+
+            TraceLog(LOG_INFO, ">>> UI STATE CHANGED TO RESULT");
+            ui = UIState::RESULT;
             break;
 
         }
 
         case UIEvent::next_round: {
 
-            RoundEnd(game);
-            if(game.round > MAX_ROUNDS) {
-
-                game.state = GameState::GAME_END; 
-                ui = UIState::RESULT;
-            }   
-            else game.state = GameState::ROUND_START;
+            ui = UIState::IN_GAME;
+            game.command = GameCommand::NEXT_ROUND;
             break;
 
         }
@@ -131,10 +148,11 @@ void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 int main() {
     
     // ゲーム画面の起動
-    InitWindow(1200, 675, "Type card Battle !");
+    InitWindow(1280, 720, "Type card Battle !");
     SetTargetFPS(60);
     
     GameData game;
+    game.version = GameVersion::V1;
     UIState uistate = UIState::TITLE;
 
     // ゲームの初期化
@@ -145,13 +163,13 @@ int main() {
     while(!WindowShouldClose()) {
 
         // 入力発生イベントの処理
-        UIEvent event = UpdateUI(uistate);
+        UIEvent event = UpdateUI(uistate, game);
 
         // ゲームへの反映処理
         UIStateManagement(event, game, uistate);
 
         // ゲーム状態の更新処理
-        GameStateManagement(game);
+        UpdateGame(game);
         
         // 描画処理
         BeginDrawing();
