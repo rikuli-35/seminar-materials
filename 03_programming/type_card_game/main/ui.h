@@ -3,37 +3,79 @@
 #include <vector>
 #include "game.h"
 
+// タイプ名
+enum TypeName {
 
-enum class HandView {
-
-    OPEN,
-    CLOSE,
+    NORMAL,
+    FIRE,
+    WATER,
+    ELECTRIC,
+    GRASS,
+    ICE,
+    FIGHTING,
+    POISON,
+    GROUND,
+    FLYING,
+    PSYCHIC,
+    BUG,
+    ROCK,
+    GHOST,
+    DRAGON,
+    DARK,
+    STEEL,
+    FAIRY,
+    UNKNOWN,
 
 };
 
-// 手札座標の構造体
-struct Hand{
+// 手札の公開
+enum class HandView {
 
-    Rectangle player_area;
-    Rectangle cpu_area;
-    int space;
+    OPEN,
+    CLOSE
 
 };
 
 // 画像挿入の構造体
-struct UIButton{
+struct UI{
 
     Texture2D tex;
     Rectangle bounds;
 
 };
 
-// 透明ボタンの当たり判定
-struct HitBox { Rectangle bounds; };
+// 透明ボタンの形
+enum class HitBoxShape {
 
-// 手札描画用配列・変数
-static UIButton typeButtons[TYPE_COUNT];
-static UIButton cardback;
+    RECTANGLE,
+    CIRCLE
+
+};
+
+// 透明ボタンの当たり判定
+struct HitBox { 
+    
+    HitBoxShape shape;
+    
+    //四角形
+    Rectangle rect;
+
+    //円
+    Vector2 center;
+    float radius;
+
+};
+
+// バージョン選択の行き先
+enum class VersionSelect {
+
+    START_GAME,
+    OPEN_CHART
+
+};
+
+// バージョン先変数
+extern VersionSelect purpose;
 
 // 画面状態の管理
 enum class UIState {
@@ -62,18 +104,20 @@ enum class UIEvent {
     game_start,
     open_explanation,
     open_type_chart,
+    open_version_select,
     back,
 
-    // バージョン選択
-    select_v1,
-    select_v2_to_v5,
-    select_v6_to_v9,
-    select_new,
+    // バージョン別画面
+    open_type_chart_1,
+    open_type_chart_2_to_5,
+    open_type_chart_6_to_9,
+    open_type_chart_new,
 
     // ゲーム画面
     draw,
     handdeath,
     use,
+    round_result,
     next_round,
     
 };
@@ -81,5 +125,5 @@ enum class UIEvent {
 // 関数の宣言
 void InitResources();
 void UnloadResources();
-UIEvent UpdateUI(UIState state);
 void DrawUI(UIState ui, GameData& game);
+UIEvent UpdateUI(UIState state, GameData& game);
