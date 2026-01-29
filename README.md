@@ -6,7 +6,7 @@
 
 ・ゲーム制作：[type_card_battle.md](03_programming/type_card_game/type_card_battle.md) 
 
-・学術研究：[seminar](01_seminar)
+・学術研究：[01_seminar](01_seminar)
 
 
 ## プロジェクトの概要
