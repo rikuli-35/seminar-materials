@@ -1,18 +1,42 @@
-## 所属研究室
+## プロジェクトの概要
 
-統計物理学を背景としながら、オンラインテストのデータを中心とした学習データの解析（ラーニング・アナリティクス）の土台の上に、「学習」を複雑系の対象の一つとして、その数理的理解を目指しています。関連して、eラーニングシステムの開発も行っています。<br>
+①対戦型RPGのタイプ相性についてネットワーク分析を行い、「ゲームバランス」をスコア化・評価
 
-研究室HP：https://stack.ilas.nagoya-u.ac.jp/nakamuralab/
+・解説資料：[type_analysis_material(simple_version).pdf](02_data_analisis/type_analysis_material(simple_version).pdf)
 
-## フォルダ構成
+・分析チュートリアル：
 
--[01_seminar](01_seminar/) 
-→大学院のゼミで行っている内容
+②対戦型RPGのタイプ相性をテーマとした、対NPC型のカードゲームを制作
 
--[02_data_analysis](02_data_analysis/)
-→データ分析プロジェクト
+-[type_card_battle_material(simple_version).pdf](03_programming/main/type_card_battle2_1.pdf)
 
--[03_programming](03_programming/) 
-→ゲーム制作のプロジェクト
+③学習者の学習ログから、「いつ」課題に取り組んでいるかの分析
+
+-[JASLA2025.pdf](01_seminar/JASLA2025.pdf)
+
+## プロジェクトの構成
+
+①データ分析プロジェクト[type_analysis.md](02_data_analysis/type_analysis.md)　
+
+②ゲーム制作プロジェクト[type_card_battle.md](03_programming/type_card_battle.md) 
+
+③大学院/学会での取り組み[seminar.md](01_seminar/seminar/md)
+
+## 使用環境
+
+<p align="left">
+  <img src="https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white">
+  <img src="https://img.shields.io/badge/C-00599C?logo=c&logoColor=white">
+  <img src="https://img.shields.io/badge/C%2B%2B-00599C?logo=cplusplus&logoColor=white">
+  <img src="assets/raylib.svg" height="28">
+</p>
+
+
+
+R言語：[RStudio(macOS/Windows 13)]
+
+C/C++言語：[Visual Studio Code]
+
+UI：[raylib](https://www.raylib.com/)
 
 ---
