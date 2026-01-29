@@ -9,35 +9,35 @@
 using namespace std;
 
 // タイプ名一覧
-vector<string> type_list = 
+std::vector<std::string> type_list = 
 {
-    "normal","fire","water","electric","grass","ice","fighting","poison","ground","flying","psychic","bug","rock","ghost","dragon","dark","steel","fairy","new"
+    "normal","fire","water","electric","grass","ice","fighting","poison","ground","flying","psychic","bug","rock","ghost","dragon","dark","steel","fairy","unknown"
 };
 
-// タイプ数変数
-int type_count = 19;
-
 // 得点表の変数
-vector<vector<double>> PointGraph;
+std::vector<std::vector<double>> PointGraph;
 
 // ファイル読み込みを行う関数
-vector<vector<double>> ReadCSV(const string& filename) {
+std::vector<std::vector<double>> ReadCSV(const std::string& filename) {
 
-    vector<vector<double>> table(TYPE_COUNT, vector<double>(TYPE_COUNT, 0.0));
+    std::vector<std::vector<double>> table(TYPE_COUNT, std::vector<double>(TYPE_COUNT, 0.0));
+    
     ifstream ifs(filename, ios::in);
     if(!ifs) {
+
         cerr << "エラー：ファイルが開けませんでした" << endl;
         return {};
+
     }
     
-    string a, d;
+    std::string a, d;
     double m;
 
     while(ifs >> a >> d >> m)  {
 
-        int a_i = find(type_list.begin(), type_list.end(), a) - type_list.begin();
-        int d_i = find(type_list.begin(), type_list.end(), d) - type_list.begin();
-        table[a_i][d_i] = m;
+        int a_i = std::find(type_list.begin(), type_list.end(), a) - type_list.begin();
+        int d_i = std::find(type_list.begin(), type_list.end(), d) - type_list.begin();
+        if(a_i < TYPE_COUNT && d_i < TYPE_COUNT) table[a_i][d_i] = m;
 
     }
     
@@ -52,7 +52,7 @@ void LoadVersion(GameVersion version, GameData& game) {
 
         case GameVersion::V1: {
 
-            type_count = 15;
+            game.type_count = 15;
             PointGraph = ReadCSV("type_analysis_1.csv");
             break;
 
@@ -60,7 +60,7 @@ void LoadVersion(GameVersion version, GameData& game) {
 
         case GameVersion::V2_TO_5: {
 
-            type_count = 17;
+            game.type_count = 17;
             PointGraph = ReadCSV("type_analysis_2_to_5.csv");
             break;
 
@@ -68,7 +68,7 @@ void LoadVersion(GameVersion version, GameData& game) {
 
         case GameVersion::V6_TO_9: {
 
-            type_count = 18;
+            game.type_count = 18;
             PointGraph = ReadCSV("type_analysis_6_to_9.csv");
             break;
 
@@ -76,7 +76,7 @@ void LoadVersion(GameVersion version, GameData& game) {
 
         case GameVersion::NEW: {
 
-            type_count = 19;
+            game.type_count = 19;
             PointGraph = ReadCSV("type_analysis_new.csv");
             break;
 
@@ -89,14 +89,10 @@ void LoadVersion(GameVersion version, GameData& game) {
 // ゲームの初期状態
 void InitGame(GameData& game) {
 
+    static std::mt19937 gen{std::random_device{}()};
+
     game.round = 1;
-    game.round_ready = false;
-
-    static std::mt19937 gen{ std::random_device{}() };
-    std::uniform_int_distribution<int> dist(0, 1);
-
-    game.attacker = static_cast<PlayerID>(dist(gen));
-    game.turn_end = game.attacker;
+    game.state = GameState::COIN_TOSS;
 
     for(auto& p : game.players) {
 
@@ -110,8 +106,8 @@ void InitGame(GameData& game) {
 
     for(int i=0; i<TYPE_COUNT; i++) {
 
-        game.players[0].deck.push_back(i);
-        game.players[1].deck.push_back(i);
+        game.players[0].deck.push_back(static_cast<Type>(i));
+        game.players[1].deck.push_back(static_cast<Type>(i));
 
     }
     
@@ -124,13 +120,55 @@ void InitGame(GameData& game) {
         for(int j=0; j<2; j++) {
 
             auto& deck = game.players[j].deck;
-            game.players[j].hand.push_back(deck.back());
+            Type card = deck.back();
+            game.players[j].hand.push_back(card);
             deck.pop_back();
 
         }
 
     }
 
+}
+
+// コイントスを行う関数
+void CoinToss(GameData& game) {
+
+    static std::mt19937 gen{std::random_device{}()};
+    std::uniform_int_distribution<int> dist(0, 1);
+    game.current_turn = static_cast<PlayerID>(dist(gen));
+
+}
+
+// 墓地から手札を回収する関数(ラウンド効果)
+void HandRecover(Player& p) {
+
+    if(p.used.empty()) return;
+
+    static std::mt19937 gen{std::random_device{}()};
+    std::uniform_int_distribution<int> dist(0, p.used.size() - 1);
+
+    int idx = dist(gen);
+    p.hand.push_back(p.used[idx]);
+    p.used.erase(p.used.begin() + idx);
+
+}
+
+// ラウンドを開始する関数
+void RoundStart(GameData& game) {
+
+    for(auto& p: game.players) {
+
+        if(p.hand.empty()) {
+
+            p.score -= 2;
+            HandRecover(p);
+
+        }
+
+    }
+
+    for(auto& p : game.players) p.select.clear();
+    
 }
 
 // ドローを行う関数
@@ -144,7 +182,7 @@ void HandDraw(GameData& game, PlayerID id) {
 
 }
 
-// ハンデスを行う関数（
+// ハンデスを行う関数
 void HandDeath(GameData& game, PlayerID id) {
 
     Player& p = game.players[static_cast<int>(id)];
@@ -157,19 +195,74 @@ void HandDeath(GameData& game, PlayerID id) {
 
 }
 
+// プレイヤーがドローかハンデスを選択する関数
+void PlayerCommand(GameData& game) {
+
+    if(game.state != GameState::DRAW_OR_HANDDEATH) return;
+    if(game.player_prepared) return;
+
+    switch(game.command) {
+
+        case GameCommand::DRAW: {
+
+            HandDraw(game, PlayerID::PLAYER);
+            game.player_prepared = true;
+            game.command = GameCommand::NONE;
+            break;
+
+        }
+
+        case GameCommand::HANDDEATH: {
+
+            HandDeath(game, PlayerID::CPU);
+            game.player_prepared = true;
+            game.command = GameCommand::NONE;
+            break;
+
+        }
+
+        default: break;
+
+    }
+
+}
+
+// CPUがドローかハンデスを選択する関数
+void CpuCommand(GameData& game) {
+
+    if(game.cpu_prepared) return;
+
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist(0, 1);
+
+    int cpu_choice = dist(rng);
+    if(cpu_choice == 0) HandDraw(game, PlayerID::CPU);
+    else HandDeath(game, PlayerID::PLAYER);
+
+    game.cpu_prepared = true;
+
+}
+
 // プレイヤーが手札を選択する関数
 void PlayerSelect(GameData& game, int index, int count) {
 
     Player& p = game.players[static_cast<int>(PlayerID::PLAYER)];
 
-    if((int)p.select.size() >= count) return ;
     if(index < 0 || index >= (int)p.hand.size()) return ;
 
-    int card = p.hand[index];
+    Type t = p.hand[index];
+    auto num = find(p.select.begin(), p.select.end(), t);
+    
+    // 選択済みなら解除
+    if(num != p.select.end()) {
 
-    if(find(p.select.begin(), p.select.end(), card) != p.select.end()) return ;
+        p.select.erase(num);
+        return;
 
-    p.select.push_back(card);
+    }
+
+    // 未選択なら追加
+    if((int)p.select.size() < count) p.select.push_back(t);
 
 }
 
@@ -177,7 +270,6 @@ void PlayerSelect(GameData& game, int index, int count) {
 void CpuSelect(GameData& game, int count) {
 
     Player& cpu = game.players[static_cast<int>(PlayerID::CPU)];
-    cpu.select.clear();
 
     if(cpu.hand.empty()) return;
 
@@ -189,7 +281,7 @@ void CpuSelect(GameData& game, int count) {
     std::uniform_int_distribution<int> use_dist(1, max_count);
     int use = use_dist(gen);
 
-    vector<int> temp = cpu.hand;
+    vector<Type> temp = cpu.hand;
     std::shuffle(temp.begin(), temp.end(), gen);
 
     for(int i=0; i<use; i++) cpu.select.push_back(temp[i]);
@@ -197,13 +289,16 @@ void CpuSelect(GameData& game, int count) {
 }
 
 // 得点計算を行う関数
-double RoundPoint(const vector<int> &attack, int defense) {
+double RoundPoint(const vector<Type>& attack, Type defense) {
 
     double score = 0.0;
-    for(int i=0; i<attack.size(); i++) {
+    int d = static_cast<int>(defense);
+
+    for(Type a : attack) {
 
         // 得点表を参照して加算
-        score += PointGraph[attack[i]][defense];
+        int ai = static_cast<int>(a);
+        score += PointGraph[ai][d];
 
     }
 
@@ -212,16 +307,16 @@ double RoundPoint(const vector<int> &attack, int defense) {
 }
 
 // ラウンド終了後の手札処理を行う関数
-void RoundManagement(GameData& game) {
+void HandManagement(GameData& game) {
 
     if(game.players[static_cast<int>(PlayerID::PLAYER)].select.empty() || game.players[static_cast<int>(PlayerID::CPU)].select.empty()) return ;
 
     // 得点加算
-    if(game.turn_end == PlayerID::PLAYER)  game.players[static_cast<int>(PlayerID::PLAYER)].score += RoundPoint(game.players[static_cast<int>(PlayerID::PLAYER)].select, game.players[static_cast<int>(PlayerID::CPU)].select[0]);
+    if(game.current_turn == PlayerID::PLAYER)  game.players[static_cast<int>(PlayerID::PLAYER)].score += RoundPoint(game.players[static_cast<int>(PlayerID::PLAYER)].select, game.players[static_cast<int>(PlayerID::CPU)].select[0]);
     else game.players[static_cast<int>(PlayerID::CPU)].score += RoundPoint(game.players[static_cast<int>(PlayerID::CPU)].select, game.players[static_cast<int>(PlayerID::PLAYER)].select[0]);
     
     // プレイヤーの手札と墓地の更新
-    for(int c : game.players[static_cast<int>(PlayerID::PLAYER)].select) {
+    for(Type c : game.players[static_cast<int>(PlayerID::PLAYER)].select) {
 
         auto a = find(game.players[static_cast<int>(PlayerID::PLAYER)].hand.begin(), game.players[static_cast<int>(PlayerID::PLAYER)].hand.end(), c);
                 
@@ -235,7 +330,7 @@ void RoundManagement(GameData& game) {
     }
 
     // CPUの手札と墓地の更新
-    for(int c : game.players[static_cast<int>(PlayerID::CPU)].select) {
+    for(Type c : game.players[static_cast<int>(PlayerID::CPU)].select) {
 
         auto a = find(game.players[static_cast<int>(PlayerID::CPU)].hand.begin(), game.players[static_cast<int>(PlayerID::CPU)].hand.end(), c);
 
@@ -250,27 +345,110 @@ void RoundManagement(GameData& game) {
 
 }
 
-// ラウンド開始
-void RoundStart(GameData& game) {
+// 次のラウンドの用意
+void NextRound(GameData& game) {
 
-    game.players[static_cast<int>(PlayerID::PLAYER)].select.clear();
-    game.players[static_cast<int>(PlayerID::CPU)].select.clear();
-    game.round_ready = false;
+    game.players[(int)PlayerID::PLAYER].select.clear();
+    game.players[(int)PlayerID::CPU].select.clear();
+    game.player_prepared = false;
+    game.cpu_prepared = false;
 
-}
-
-// ラウンド終了
-void RoundEnd(GameData& game) {
-
+    game.current_turn = (game.current_turn == PlayerID::PLAYER) ? PlayerID::CPU : PlayerID::PLAYER;
     game.round++;
-    game.attacker = game.turn_end;
+    game.state = (game.round > MAX_ROUNDS) ? GameState::GAME_END : GameState::ROUND_START;
+    game.command = GameCommand::NONE;
 
 }
 
-// 終了時処理
-bool IsRoundFinished(const GameData& game) {
+// ゲーム状態を更新する関数
+void UpdateGame(GameData& game) {
 
-    return game.players[static_cast<int>(PlayerID::PLAYER)].select.size() > 0 && game.players[static_cast<int>(PlayerID::CPU)].select.size() > 0;
+    // UIからの要求処理
+    PlayerCommand(game);
+    
+    // ゲーム状態の更新
+    switch(game.state) {
+
+        case GameState::COIN_TOSS: {
+
+            CoinToss(game);
+            game.state = GameState::ROUND_START;
+            break;
+
+        }
+
+        case GameState::ROUND_START: {
+
+            RoundStart(game);
+            game.player_prepared = false;
+            game.cpu_prepared = false;
+            game.state = GameState::DRAW_OR_HANDDEATH;
+            break;
+
+        }
+
+        case GameState::DRAW_OR_HANDDEATH: {
+
+            CpuCommand(game);
+            if(game.player_prepared && game.cpu_prepared) game.state = GameState::SELECT_PHASE;
+            break;
+
+        }
+
+        case GameState::SELECT_PHASE: {
+
+            // CPUの選択
+            int cpu_use = (game.current_turn == PlayerID::CPU) ? 2 : 1;
+            int player_use = (game.current_turn == PlayerID::PLAYER) ? 2 : 1;
+
+            // CPUの手札選択は一度のみ
+            if(game.players[(int)PlayerID::CPU].select.empty()) CpuSelect(game, cpu_use);
+
+            // プレイヤーの選択待ち
+            if(game.command == GameCommand::USE) {
+
+                if(game.players[(int)PlayerID::PLAYER].select.size() != player_use) {
+
+                    game.command = GameCommand::NONE;
+                    break;
+
+                }
+
+                game.command = GameCommand::NONE;
+                game.state = GameState::ROUND_RESULT;
+                
+            }
+
+            break;
+
+        }
+
+        case GameState::ROUND_RESULT: {
+
+            HandManagement(game);
+            if(game.command == GameCommand::NEXT_ROUND) NextRound(game);
+            break;
+
+        }
+
+        /*
+        case GameState::ROUND_EFFECT: {
+
+            break;
+
+        }
+        */
+        
+        case GameState::GAME_END: {
+
+            break;
+
+        }
+        
+        default: break;
+
+    }
 
 }
+
 
