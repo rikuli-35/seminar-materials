@@ -1,6 +1,6 @@
-## ポートフォリオ構成
+## プロジェクト構成
 
-データ分析・ゲーム制作・学術研究での成果物をまとめています。
+ここでは、データ分析・ゲーム制作・学術研究での成果物をまとめています。
 
 ・データ分析：[type_analysis.md](02_data_analysis/type_analysis.md)　
 
@@ -10,6 +10,8 @@
 
 
 ## プロジェクトの概要
+
+各プロジェクトのうち、代表的な成果物を以下に記載しています。
 
 ### ① 対戦型RPGのタイプ相性ネットワーク分析(データ分析作品)
 
@@ -24,7 +26,6 @@
   <img src="02_data_analysis/type_analysis_logo2.png" style="height:200px; width="240">
   <img src="02_data_analysis/type_analysis_logo3.png" style="height:200px; width="240">
 </p>
-
 
 ### ② タイプ相性カードゲームの制作（ゲーム作品）
 
@@ -42,7 +43,7 @@
   <img src="01_seminar/seminar_logo.png" style="height:200px; width="240">
 </p>
 
-## 使用環境
+## 使用言語・環境
 
 <p align="left">
   <a href="https://en.cppreference.com/w/c">
