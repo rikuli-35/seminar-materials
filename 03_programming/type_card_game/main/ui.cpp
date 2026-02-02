@@ -28,6 +28,7 @@ HitBox draw_Button;
 HitBox handdeath_Button;
 HitBox use_Button;
 HitBox next_Button;
+HitBox back_title_Button;
 
 // 背景画像
 UI title_chart;
@@ -131,7 +132,7 @@ void InitResources() {
     handdeath_chart = CreateUI("UI/ai_handdeath.png", W * 0.85f, H * 0.6f, W * 0.4f, H * 0.1f);
     use_chart = CreateUI("UI/ai_use.png",W * 0.85f, H * 0.8f, W * 0.4f, H * 0.1f);
     card_back_chart = CreateUI("UI/ai_cardback.png", W * 0.2f, H * 0.05f, W, H);
-    next_chart = CreateUI("UI/ai_next.png", W * 0.25f, H * 0.9f, W * 0.1f, H * 0.8f);
+    next_chart = CreateUI("UI/ai_next.png", W * 0.5f, H * 0.9f, W * 0.15f, H * 0.6f);
     
     // タイトル画面のボタン作成
     start_Button = CreateCircleHitBox(W * 0.37f, H * 0.52f, W * 0.09f);
@@ -145,11 +146,12 @@ void InitResources() {
     version_new_Button = CreateRectangleHitBox(W * 0.4f, H * 0.76f, W * 0.2f, H * 0.13f);
     back_Button = CreateRectangleHitBox(W * 0.23f, H * 0.90f, W * 0.11f, H * 0.077f);
 
-    // ゲーム画面のボタン作成(位置未定) 
+    // ゲーム画面のボタン作成
     draw_Button = CreateRectangleHitBox(W * 0.79f, H * 0.35f, W * 0.12f, H * 0.1f);
     handdeath_Button = CreateRectangleHitBox(W * 0.79f, H * 0.55f, W * 0.12f, H * 0.1f);
     use_Button = CreateRectangleHitBox(W * 0.79f, H * 0.75f, W * 0.12f, H * 0.1f);
-    next_Button = CreateRectangleHitBox(W * 0.23f, H * 0.90f, W * 0.11f, H * 0.077f);
+    next_Button = CreateRectangleHitBox(W * 0.425f, H * 0.845f, W * 0.15f, H * 0.12f);
+    back_title_Button = CreateRectangleHitBox(W * 0.425f, H * 0.78f, W * 0.15f, H * 0.115f);
     
     // タイプカード一覧
     static_assert(TYPE_COUNT == 19, "mismatch");
@@ -261,17 +263,19 @@ bool IsButtonClicked(const HitBox& btn) {
 // ラウンド結果を描画する関数
 void DrawRoundResult(GameData& game) {
 
-    DrawText(TextFormat("ROUND %d", game.round), H * 0.5, W * 0.5, 40, WHITE);
+    DrawText(TextFormat("ROUND %d", game.round), W * 0.38f, H* 0.1f, 80, GOLD);
 
     // 使用した手札を表示
-    CreateUI(???); // プレイヤーの手札
-    DrawText("VS", H * 0.5, W * 0.7, 40, BLACK);
-    CreateUI(???); // CPUの手札
+    DrawText("YOU USED", W * 0.1f, H * 0.5f, 20, BLACK);
+    DrawHandCards(game.player_last_used, W * 0.25f, H * 0.4f, W * 0.09, HandView::OPEN); 
+    DrawText("VS", W * 0.48f, H * 0.45f, 50, RED);
+    DrawText("CPU USED", W * 0.8f, H * 0.5f, 20, BLACK);
+    DrawHandCards(game.cpu_last_used, W * 0.6f, H * 0.4f, W * 0.09, HandView::OPEN);
 
     // 現在のスコアを表示
-    DrawText(TextFormat("YOU: %d (+%d)"), game.players[PlayerID::PLAYER].score, ???); //得点計算の値を入れたい
-    DrawText(TextFormat("CPU: %d (+%d)"), game.players[PlayerID::CPU].score, ???)
-
+    DrawText(TextFormat("YOU: %.1f (+%.1f)", game.players[(int)PlayerID::PLAYER].score, (game.current_turn == PlayerID::PLAYER ? game.round_point : 0.0f)), W * 0.25f, H * 0.7f, 30, BLUE);
+    DrawText(TextFormat("CPU: %.1f (+%.1f)", game.players[(int)PlayerID::CPU].score, (game.current_turn == PlayerID::CPU ? game.round_point : 0.0f)), W * 0.6f, H * 0.7f, 30, BLUE);
+    
 }
 
 // デバック用関数(透明ボタンの確認)
@@ -298,7 +302,7 @@ void DrawGame(GameData& game) {
 
         case GameState::ROUND_RESULT: {
 
-            DrawText("RESULT",400,100,40,WHITE);
+            DrawRoundResult(game);
             // 選ばれたカードを表示＋スコアの表示
             break;
 
@@ -433,6 +437,7 @@ UIEvent UpdateUI(UIState state, GameData& game) {
 
         }
         */
+        
         // ゲーム画面
         case UIState::IN_GAME: {
 
@@ -484,19 +489,21 @@ UIEvent UpdateUI(UIState state, GameData& game) {
 
         }
 
-        /*
+        
         case UIState::END: {
 
-            // if(IsButtonClicked(back_to_title_Button)) return UIEvent::game_start;
+            if(IsButtonClicked(back_title_Button)) return UIEvent::back_title;
             break;
+
         }
-        */
+        
 
     }
 
     return UIEvent::none;
 
 }
+
 
 // UIの描画を行う関数
 void DrawUI(UIState ui, GameData& game) {
@@ -614,17 +621,9 @@ void DrawUI(UIState ui, GameData& game) {
         // ラウンドリザルト画面
         case UIState::RESULT: {
 
+            DrawRoundResult(game);
             DisplayUI(next_chart);
             DrawHitBoxDebug(next_Button);
-
-            /*
-            if(IsButtonClicked(next_Button)) {
-
-                game.command = GameCommand::NEXT_ROUND;
-                
-            }
-            */
-
             break;
 
         }
@@ -632,11 +631,11 @@ void DrawUI(UIState ui, GameData& game) {
         // 最終結果画面
         case UIState::END: { 
 
-            /*
-            if(game.players[static_cast<int>(PlayerID::PLAYER)].score > game.players[static_cast<int>(PlayerID::CPU)].score) DisplayUI(result_win_chart);
-            else if(game.players[static_cast<int>(PlayerID::PLAYER)].score < game.players[static_cast<int>(PlayerID::CPU)].score) DisplayUI(result_lose_chart);
+            if(game.players[(int)(PlayerID::PLAYER)].score > game.players[(int)(PlayerID::CPU)].score) DisplayUI(result_win_chart);
+            else if(game.players[(int)(PlayerID::PLAYER)].score < game.players[(int)(PlayerID::CPU)].score) DisplayUI(result_lose_chart);
             else DisplayUI(result_draw_chart);
-            */
+
+            DrawHitBoxDebug(back_title_Button);
             break;
 
         }
