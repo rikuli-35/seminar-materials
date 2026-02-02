@@ -119,6 +119,7 @@ enum class UIEvent {
     use,
     round_result,
     next_round,
+    back_title
     
 };
 
