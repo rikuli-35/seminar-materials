@@ -5,6 +5,12 @@
 // UIの全体の状態管理
 void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 
+    // ゲーム状態とUI画面を同期
+    if(game.state == GameState::ROUND_RESULT && ui != UIState::RESULT) ui = UIState::RESULT;
+    if(game.state == GameState::GAME_END && ui != UIState::END) ui = UIState::END;
+    if(game.state == GameState::ROUND_START && ui == UIState::RESULT) ui = UIState::IN_GAME;
+
+    // UIイベントの対応
     switch(event) {
 
         case UIEvent::game_start: {
@@ -123,7 +129,6 @@ void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 
         case UIEvent::round_result: {
 
-            TraceLog(LOG_INFO, ">>> UI STATE CHANGED TO RESULT");
             ui = UIState::RESULT;
             break;
 
@@ -131,8 +136,15 @@ void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
 
         case UIEvent::next_round: {
 
-            ui = UIState::IN_GAME;
-            game.command = GameCommand::NEXT_ROUND;
+            if(game.state == GameState::ROUND_RESULT) game.command = GameCommand::NEXT_ROUND; 
+            break;
+
+        }
+
+        case UIEvent::back_title: {
+
+            ui = UIState::TITLE;
+            InitGame(game);
             break;
 
         }
@@ -143,7 +155,6 @@ void UIStateManagement(UIEvent event, GameData& game, UIState& ui) {
     }
 
 }
-
 
 int main() {
     
@@ -162,15 +173,15 @@ int main() {
     // 画面を閉じるまで継続して行う処理
     while(!WindowShouldClose()) {
 
-        // 入力発生イベントの処理
+        // 入力イベントの取得
         UIEvent event = UpdateUI(uistate, game);
 
-        // ゲームへの反映処理
+        // ゲーム状態の更新
+        if(event != UIEvent::back_title) UpdateGame(game);
+
+        // 入力イベント処理
         UIStateManagement(event, game, uistate);
 
-        // ゲーム状態の更新処理
-        UpdateGame(game);
-        
         // 描画処理
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -182,5 +193,5 @@ int main() {
     // ゲーム終了
     UnloadResources();
     CloseWindow();
-
+    
 }
