@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 
-// タイプ数・ラウンド数
 constexpr int TYPE_COUNT = 19;
 constexpr int MAX_ROUNDS = 10;
 
@@ -63,20 +62,22 @@ struct Player {
 
 };
 
-// ゲーム画面タグ
+// ゲーム内処理のタグ
 enum class GameState {
 
+    
     COIN_TOSS,
+    ROUND_EFFECT,
     ROUND_START,
     DRAW_OR_HANDDEATH,
     SELECT_PHASE,
-    ROUND_EFFECT,
+    POINT_CALCULATION,
     ROUND_RESULT,
     GAME_END
 
 };
 
-// ゲーム内アクションタグ
+// ゲーム内アクションのタグ
 enum class GameCommand {
 
     NONE,
@@ -111,6 +112,14 @@ struct GameData {
     bool player_prepared = false;
     bool cpu_prepared = false;
 
+    // 結果画面で表示
+    std::vector<Type> player_last_used;
+    std::vector<Type> cpu_last_used;
+    double round_point;
+
+    // ラウンド管理
+    bool round_end = false;
+
 };
 
 // 関数の宣言（準備・初期化）
@@ -137,3 +146,4 @@ void PlayerSelect(GameData& game, int index, int count);
 // 関数の宣言（CPU操作）
 void CpuCommand(GameData& game);
 void CpuSelect(GameData& game, int count);
+
