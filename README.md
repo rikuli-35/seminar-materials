@@ -33,6 +33,11 @@
 
 ・解説資料(設計思想)：[type_card_battle_material(simple_version).pdf](03_programming/type_card_game/main/type_card_battle2_1.pdf)
 
+<p align="center">
+  <img src="03_programming/title_logo.png" style="height:200px; width="240">
+  <img src="03_programming/game_logo.png" style="height:200px; width="240">
+</p>
+
 ### ③学習分析(学術研究)
 
 学習者の学習履歴から「いつ」課題に取り組んだのかを分析しました。
