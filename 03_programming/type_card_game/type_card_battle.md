@@ -12,7 +12,7 @@ C・C++言語でNPC対戦型のカードゲームを制作しました。
 
 C言語のコード（デモ版）：[type_card_battle.c](./demo/type_card_battle.c/)
 
-C++のコード(現在制作中/随時更新)
+C++のコード(現在制作中・随時更新中)
 - type_card_battle2.cpp （メイン関数）：[type_card_battle2.cpp](./main/type_card_battle2.cpp/)
 - game.h　（ゲームロジックに関するヘッダファイル）：[game.h](./main/game.h/)
 - game.cpp （ゲームロジックに関する実装ファイル）：[game.cpp](./main/game.cpp/)
