@@ -1,6 +1,6 @@
 # 対NPCのタイプ相性カードゲームバトル
 
-C・C++言語でNPC対戦型のカードゲームを自作しました。
+C・C++言語でNPC対戦型のカードゲームを制作しました。
 
 下記の資料からゲームの概要をご覧いただけます（メイン版推奨）。
 
@@ -10,13 +10,15 @@ C・C++言語でNPC対戦型のカードゲームを自作しました。
 
 # 実装コード
 
-C言語のコード：[type_card_battle.c](./demo/type_card_battle.c/)
+C言語のコード（デモ版）：[type_card_battle.c](./demo/type_card_battle.c/)
 
-C++のコード(現在制作中/随時更新)：[type_card_battle2.cpp](./main/type_card_battle2.cpp/)
+C++のコード(現在制作中/随時更新)
+- type_card_battle2.cpp （メイン関数）：[type_card_battle2.cpp](./main/type_card_battle2.cpp/)
 - game.h　（ゲームロジックに関するヘッダファイル）：[game.h](./main/game.h/)
 - game.cpp （ゲームロジックに関する実装ファイル）：[game.cpp](./main/game.cpp/)
 - ui.h （UIに関するヘッダファイル）：[ui.h](./main/ui.h/)
 - ui.cpp （UIに関する実装ファイル）：[ui.cpp](./main/ui.cpp/)
+- UIフォルダ（ゲーム内画像は生成系AIを用いて制作しました）：[UI](./main/UI)
 
 # 現在の制作状況について(2026/2/2)
 
