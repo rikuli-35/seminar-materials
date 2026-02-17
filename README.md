@@ -22,9 +22,9 @@
 ・分析チュートリアル：https://rikuli-35.github.io/seminar-materials/02_data_analysis/type_analysis_tutorial.html
 
 <p align="center">
-  <img src="02_data_analysis/type_analysis_logo.png" style="height:200px; width="240">
-  <img src="02_data_analysis/type_analysis_logo2.png" style="height:200px; width="240">
-  <img src="02_data_analysis/type_analysis_logo3.png" style="height:200px; width="240">
+  <img src="02_data_analysis/type_analysis_logo.png" style="height:200px; width="230">
+  <img src="02_data_analysis/type_analysis_logo2.png" style="height:200px; width="230">
+  <img src="02_data_analysis/type_analysis_logo3.png" style="height:200px; width="230">
 </p>
 
 ### ② タイプ相性カードゲームの制作（ゲーム作品）
@@ -34,7 +34,7 @@
 ・解説資料(設計思想)：[type_card_battle_material(simple_version).pdf](03_programming/type_card_game/main/type_card_battle2_1.pdf)
 
 <p align="center">
-  <img src="03_programming/title_logo.png" style="height:200px; width="240">
+  <img src="03_programming/type_card_game/main/UI/ai_title.png" style="height:200px; width="240">
   <img src="03_programming/game_logo.png" style="height:200px; width="240">
 </p>
 
