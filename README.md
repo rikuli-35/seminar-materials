@@ -35,6 +35,7 @@
 
 <p align="center">
   <img src="03_programming/type_card_game/main/UI/ai_title.png" style="height:200px; width="240">
+  <img src="03_programming/type_card_game/main/UI/ai_version.png" style="height:200px; width="240">
   <img src="03_programming/game_logo.png" style="height:200px; width="240">
 </p>
 
