@@ -35,8 +35,9 @@
 
 <p align="center">
   <img src="03_programming/type_card_game/main/UI/ai_title.png" style="height:200px; width="240">
-  <img src="03_programming/type_card_game/main/UI/ai_version.png" style="height:200px; width="240">
+  <img src="03_programming/type_card_game/main/UI/ai_version_select.png" style="height:200px; width="240">
   <img src="03_programming/game_logo.png" style="height:200px; width="240">
+  <img src="03_programming/type_card_game/main/UI/ai_result_win.png" style="height:200px; width="240">
 </p>
 
 ### ③学習分析(学術研究)
